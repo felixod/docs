@@ -6,6 +6,7 @@ namespace backend\controllers;
 
 use backend\models\File;
 use backend\models\FileStatus;
+use backend\models\FileType;
 use backend\models\FileUser;
 use backend\models\OrgStruktura;
 use backend\models\SendFileForm;
@@ -92,6 +93,10 @@ class SendfileController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $model->file = UploadedFile::getInstance($model, 'file');
+            Yii::$app->session->setFlash(
+                'sendu-success',
+                true
+            );
             // Проверяем эти данные
             if (!$model->validate()) {
                 /*
@@ -108,6 +113,8 @@ class SendfileController extends Controller
                         'name' => $model->name,
                         'email' => $model->email,
                         'body_email' => $model->body_email,
+                        'file' => $model->file,
+                        'dropList' => $model->dropList,
                         'body' => $model->body,
 
                     ]
@@ -133,15 +140,23 @@ class SendfileController extends Controller
                 /*
                  * Данные прошли валидацию
                  */
+
                 SendFileForm::SendFile($model);
 
 
                 return $this->refresh();
             }
         }
+        $access_control = FileType::find()->all();
+        // Выводим все достпуные варианты прав доступа
+        $items = ArrayHelper::map($access_control, 'id_type_file', 'name_type_file');
 
+        //var_dump($items);
+        $params = [
+            'prompt' => 'Выберите вид документа'
+        ];
+        return $this->render('sendu', ['model' => $model, 'params' => $params, 'items' => $items]);
 
-        return $this->render('sendu', ['model' => $model]);
     }
 
     /**
@@ -167,7 +182,6 @@ class SendfileController extends Controller
                 Yii::$app->session->setFlash(
                     'sendu-data',
                     [
-                        'name' => $model->name,
                         'email' => $model->email,
                         'body' => $model->body
                     ]

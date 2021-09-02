@@ -73,10 +73,10 @@ $this->title = 'Список пользователей';
                                                 <th scope="row"><?= $item[$i]['id_file_user'] ?></th>
                                                 <td><?= $item[$i]['full_name'] ?></td>
                                                 <td><?= $item[$i]['email'] ?></td>
-                                                <td><? if ($item[$i]['date_confirm'] == 1) {
+                                                <td><? if ($item[$i]['confirm'] == 1) {
                                                         echo 'Да';
                                                     } else {
-                                                        echo ' нет';
+                                                        echo ' Нет';
                                                     } ?></td>
                                                 <td><?= $item[$i]['date_confirm'] ?></td>
                                             </tr>

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\OrgStrukturaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Org Strukturas';
+$this->title = 'Организационная структура';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="container">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1><?= Html::encode($this->title) ?></h1>
 
         <p>
-            <?= Html::a('Create Org Struktura', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Создание организационной единицы', ['create'], ['class' => 'btn btn-success']) ?>
         </p>
 
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

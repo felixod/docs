@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\OrgStruktura */
 
 $this->title = $model->id_struktura;
-$this->params['breadcrumbs'][] = ['label' => 'Org Strukturas', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Организационная структура', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -17,11 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1><?= Html::encode($this->title) ?></h1>
 
         <p>
-            <?= Html::a('Update', ['update', 'id' => $model->id_struktura], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Delete', ['delete', 'id' => $model->id_struktura], [
+            <?= Html::a('Обновить', ['update', 'id' => $model->id_struktura], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Удалить', ['delete', 'id' => $model->id_struktura], [
                 'class' => 'btn btn-danger',
                 'data' => [
-                    'confirm' => 'Are you sure you want to delete this item?',
+                    'confirm' => 'Вы уверены, что хотите удалить этот элемент?',
                     'method' => 'post',
                 ],
             ]) ?>

@@ -39,8 +39,8 @@ class OrgStruktura extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_struktura' => 'Id Struktura',
-            'name_struktura' => 'Name Struktura',
+            'id_struktura' => 'Уникальный номер',
+            'name_struktura' => 'Наименование организационной единицы',
         ];
     }
 

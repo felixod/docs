@@ -18,6 +18,7 @@ class SendFileForm extends Model
     public $email;
     public $body;
     public $body_email;
+    public $dropList;
     public $file;
 
 
@@ -27,6 +28,7 @@ class SendFileForm extends Model
             'email' => 'E-mail',
             'body_email' => 'Текст письма',
             'body' => 'Информация об документе',
+            'dropList' => 'Вид документа',
             'file' => 'Ваш файл',
 
         ];
@@ -44,6 +46,8 @@ class SendFileForm extends Model
             ['body_email', 'required', 'message' => 'Поле «Текст письма» обязательно для заполнения'],
             // поле body обязательно для заполнения
             ['body', 'required', 'message' => 'Поле «Сообщение» обязательно для заполнения'],
+            //поле dropList обязательно для заполнения
+            ['dropList', 'required', 'message' => 'Поле «Сообщение» обязательно для заполнения'],
             // поле file обязательно для заполнения
             [['file'], 'file', 'extensions' => ['pdf'], 'skipOnEmpty' => false],
             // поле name должны быть не более 50 символов
@@ -76,6 +80,7 @@ class SendFileForm extends Model
 
     public static function SendFile($model)
     {
+//        var_dump($model);
         if (Yii::$app->request->isPost) {
 
             $date = date('Y-m-d H:i:s');
@@ -102,12 +107,13 @@ class SendFileForm extends Model
 
         //todo заменить id структуры или выкинуть совсем
         $sql->id_struktur = Yii::$app->user->identity->org_struktur;
-        $sql->themes = $model->name;
-        $sql->name_file = $namefile;
-        $sql->other_info = $model->body;
-        $sql->date_file = $date;
-        $sql->type_file = $typef;
-        $sql->path = $pathf;
+        $sql->themes = strip_tags($model->name);
+        $sql->name_file = strip_tags($namefile);
+        $sql->other_info = strip_tags($model->body);
+        $sql->date_file = strip_tags($date);
+        $sql->type_file = strip_tags($typef);
+        $sql->id_type_file = strip_tags($model->dropList);
+        $sql->path = strip_tags($pathf);
         $sql->save();
 
         //Возвращаю последний ID из Insert в MySQL
