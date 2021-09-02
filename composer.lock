@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f0fbb1519699286e76a5081ae9bc4f4",
+    "content-hash": "eb36e19ccae4b7e78874f698407b1efc",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -333,16 +333,16 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v2.0.6",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "9b6bc8335e8e561e3953826efefd57b1df7bdce0"
+                "reference": "fb780df52a2a4c28ff9b8267a3fb9cec3bb17202"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/9b6bc8335e8e561e3953826efefd57b1df7bdce0",
-                "reference": "9b6bc8335e8e561e3953826efefd57b1df7bdce0",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/fb780df52a2a4c28ff9b8267a3fb9cec3bb17202",
+                "reference": "fb780df52a2a4c28ff9b8267a3fb9cec3bb17202",
                 "shasum": ""
             },
             "suggest": {
@@ -352,7 +352,7 @@
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "3.0.x-dev"
                 }
             },
             "autoload": {
@@ -383,9 +383,9 @@
             ],
             "support": {
                 "issues": "https://github.com/kartik-v/yii2-krajee-base/issues",
-                "source": "https://github.com/kartik-v/yii2-krajee-base/tree/v2.0.6"
+                "source": "https://github.com/kartik-v/yii2-krajee-base/tree/v3.0.0"
             },
-            "time": "2021-04-08T18:07:22+00:00"
+            "time": "2021-09-01T11:11:25+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-select2",
@@ -405,6 +405,7 @@
                 "kartik-v/yii2-krajee-base": ">=1.9",
                 "select2/select2": ">=4.0"
             },
+            "default-branch": true,
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
@@ -439,6 +440,10 @@
                 "widget",
                 "yii2"
             ],
+            "support": {
+                "issues": "https://github.com/kartik-v/yii2-widget-select2/issues",
+                "source": "https://github.com/kartik-v/yii2-widget-select2/tree/v2.2.1"
+            },
             "funding": [
                 {
                     "url": "https://opencollective.com/yii2-widget-select2",
@@ -1246,6 +1251,7 @@
                 "yiisoft/yii2": "^2.0",
                 "yiisoft/yii2-bootstrap4": "*"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1263,6 +1269,10 @@
                 }
             ],
             "description": "Bootstrap progress bar widget with updating thru ajax feature for yii2",
+            "support": {
+                "issues": "https://github.com/wa1kb0y/yii2-ajax-progress-bar/issues",
+                "source": "https://github.com/wa1kb0y/yii2-ajax-progress-bar/tree/master"
+            },
             "time": "2021-03-26T22:53:19+00:00"
         },
         {
@@ -5484,8 +5494,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kartik-v/yii2-widget-select2": 20,
-        "walkboy/yii2-ajax-progress-bar": 20
+        "walkboy/yii2-ajax-progress-bar": 20,
+        "kartik-v/yii2-widget-select2": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -5494,7 +5504,7 @@
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.3"
+        "php": "7.4"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }

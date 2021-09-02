@@ -1,8 +1,8 @@
 {
-    "name": "Remote acquaintance system",
-    "description": "",
+    "name": "yiisoft/yii2-app-advanced",
+    "description": "Yii 2 Advanced Project Template",
     "keywords": ["document", "report", "advanced", "project template"],
-    "homepage": "",
+    "homepage": "http://www.yiiframework.com/",
     "type": "project",
     "license": "BSD-3-Clause",
     "support": {
@@ -19,8 +19,8 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "yiisoft/yii2-bootstrap4": "^2.0",
         "phpoffice/phpword": "^0.18.2",
-        "kartik-v/yii2-widget-select2": "@dev",
-        "walkboy/yii2-ajax-progress-bar": "dev-master"
+        "walkboy/yii2-ajax-progress-bar": "dev-master",
+        "kartik-v/yii2-widget-select2": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -33,12 +33,10 @@
         "codeception/verify": "~0.5.0 || ~1.1.0",
         "symfony/browser-kit": ">=2.7 <=4.2.4"
     },
-
-
     "config": {
         "process-timeout": 1800,
         "platform": {
-            "php": "7.3"
+            "php": "7.4"
         },
         "fxp-asset": {
             "enabled": false
