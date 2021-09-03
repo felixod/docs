@@ -2,10 +2,13 @@
 
 /* @var $this yii\web\View */
 
+use yii\helpers\Url;
+
 $this->title = 'Информационная страница';
 ?>
+<div class="container">
 <?php foreach ($gr as $item) { ?>
-    <div class="container">
+
         <div class="accordion" id="accordionExample">
             <div class="card">
                 <div class="card-header" id="<?= $item[0]['id_type_file']?>">
@@ -16,7 +19,7 @@ $this->title = 'Информационная страница';
                     </h5>
                 </div>
 
-                <div id="<?=$item[0]['name_type_file']?>" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div id="<?=$item[0]['name_type_file']?>" class="collapse show" aria-labelledby="headingOne" data-parent="#<?=$item[0]['name_type_file']?>">
                     <div class="card-body">
                         <h3></h3>
                         <table class="table">
@@ -24,7 +27,7 @@ $this->title = 'Информационная страница';
                             <tr>
                                 <th scope="col">Номер документа</th>
                                 <th scope="col">Наименование</th>
-                                <th scope="col">Почта</th>
+                                <th scope="col">Ссылка</th>
                                 <th scope="col">Статус документа</th>
                                 <th scope="col">Дата публикации</th>
                             </tr>
@@ -35,7 +38,7 @@ $this->title = 'Информационная страница';
                                 <tr>
                                     <th scope="row"><?= $item[$i]['id_file'] ?></th>
                                     <td><?= $item[$i]['themes'] ?></td>
-                                    <td><?= $item[$i]['email'] ?></td>
+                                    <td><a href="<?=Url::to(['sendfile/viewud', ], true)?>">Ссылка</a></td>
                                     <td><?= $item[$i]['status']?></td>
                                     <td><?= $item[$i]['date_file'] ?></td>
                                 </tr>
@@ -47,24 +50,9 @@ $this->title = 'Информационная страница';
             </div>
         </div>
 
-    </div>
-<?php } ?>
-<div class="accordion" id="accordionExample">
-    <div class="card">
-        <div class="card-header" id="headingOne">
-            <h2 class="mb-0">
-                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Сворачиваемый групповой элемент #1
-                </button>
-            </h2>
-        </div>
 
-        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-            <div class="card-body">
-                Некоторый заполнитель для первой панели аккордеона. Эта панель отображается по умолчанию благодаря классу <code>.show</code>.
-            </div>
-        </div>
-    </div>
+<?php } ?>
+</div>
 
 <!--<div class="container">-->
 <!--<div class="row">-->

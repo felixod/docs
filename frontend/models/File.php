@@ -179,6 +179,7 @@ class File extends \yii\db\ActiveRecord
                     'date_file' => $key['date_file'],
                     'type_file' => $key['type_file'],
                     'path' => $key['path'],
+                    'status' => $key['status'],
                     'id_type_file' => $key['id_type_file'],
                     'name_type_file' => $key['name_type_file'],
                     'parent' => $key['parent']
