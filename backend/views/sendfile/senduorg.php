@@ -54,14 +54,22 @@ if (Yii::$app->session->hasFlash('sendu-data')) {
     </div>
     <?php ActiveForm::end(); ?>
 </div>
-<?php if (Yii::$app->session->hasFlash('sendu-data')) { ?>
 <script>
-
     $(document).ready(function () {
         $(".form-horizontal").on("submit", function (e) {
 
-            $('.spinner-grow').show();
 
+            var email = $('#email').val();
+            var body_email = $('#body_email').val();
+            var body = $('#body').val();
+
+            //todo сделать проверка на выбранный селект
+            if (email.length != 0 && body_email.length != 0 && body.length != 0) {
+
+                $('.spinner-grow').show();
+            } else {
+
+            }
         })
+    })
 </script>
-<?php }?>

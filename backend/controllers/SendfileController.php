@@ -14,6 +14,7 @@ use backend\models\ConfirmForm;
 use backend\models\SendFileOrgForm;
 use DirectoryIterator;
 use Yii;
+use yii\bootstrap4\Progress;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
@@ -140,6 +141,7 @@ class SendfileController extends Controller
                 /*
                  * Данные прошли валидацию
                  */
+
 
                 SendFileForm::SendFile($model);
 

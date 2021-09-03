@@ -80,6 +80,7 @@ class SendFileForm extends Model
 
     public static function SendFile($model)
     {
+
 //        var_dump($model);
         if (Yii::$app->request->isPost) {
 
