@@ -1,11 +1,14 @@
 <?php
 namespace frontend\controllers;
 
+use app\models\File;
+use app\models\FileType;
 use backend\models\SignupForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -74,7 +77,30 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $filemodel= new File();
+        $data = FileType::find()->all();
+        $institut = [];
+        $k=0;
+        if (!empty($data)) {
+
+            foreach ($data as $key) {
+
+                $institut[$k] = [
+                    'id_type_file' => $key['id_type_file'],
+                ];
+                $k++;
+            }
+        }
+//        foreach ($institut as $item){
+//            var_dump($item);
+//        }
+        $data_2 = $filemodel->search_2($institut);
+
+        // Выводим все достпуные варианты прав доступа
+        $items = ArrayHelper::map($data, 'id_file', 'name_file', 'id_type_file');
+
+//        var_dump($items);
+        return $this->render('index', ['data' => $items, 'gr' => $data_2 ]);
     }
 
     /**
