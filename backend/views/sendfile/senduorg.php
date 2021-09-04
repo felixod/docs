@@ -28,14 +28,13 @@ if (Yii::$app->session->hasFlash('sendu-data')) {
     <p></p>
     <h1>Рассылка</h1>
     <p></p>
-    <?php $form = ActiveForm::begin([
+    <?php $form = ActiveForm::begin(['options' => [
         'id' => 'feedback',
-        'class' => 'form-horizontal',
-        'fieldConfig' => [
-            'options' => ['enctype' => 'multipart/form-data']]]); ?>
+        'enctype' => 'multipart/form-data',
+        'class' => 'form-horizontal']]); ?>
 
     <? //= $form->field($model, 'name')->textInput(['value' => $name]); ?>
-    <?= $form->field($model, 'email')->textinput(['value' => $email,'placeholder' => 'Иванов Иван Иванович - test@sgups.ru; Сергеев Иван Сергеевич - test2@test.ru; ', 'id' => 'email']); ?>
+    <?= $form->field($model, 'email')->textinput(['value' => $email, 'placeholder' => 'Иванов Иван Иванович - test@sgups.ru; Сергеев Иван Сергеевич - test2@test.ru; ', 'id' => 'email']); ?>
     <?= $form->field($model, 'body_email')->textarea(['rows' => 5, 'placeholder' => 'Ознакомиться с документом до 00.00.0000', 'value' => $body, 'id' => 'body_email']); ?>
     <?= $form->field($model, 'body')->textarea(['rows' => 5, 'placeholder' => 'В документе содержится информация об ....', 'value' => $body, 'id' => 'body']); ?>
     <?= $form->field($model, 'dropList')->widget(Select2::classname(), [
@@ -49,9 +48,9 @@ if (Yii::$app->session->hasFlash('sendu-data')) {
             <span class="sr-only">Загрузка...</span>
         </div>
     </div>
-    <p></p>
+
     <div class="form-group">
-        <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'type' => 'submit']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>
@@ -59,18 +58,18 @@ if (Yii::$app->session->hasFlash('sendu-data')) {
     $(document).ready(function () {
         $(".form-horizontal").on("submit", function (e) {
 
-            var dropList = $('#dropList').val();
+
             var email = $('#email').val();
             var body_email = $('#body_email').val();
             var body = $('#body').val();
 
-            if (dropList.length != 0 && email.length != 0 && body_email.length != 0 && body.length !=0) {
+            //todo сделать проверка на выбранный селект
+            if (email.length != 0 && body_email.length != 0 && body.length != 0) {
+
                 $('.spinner-grow').show();
             } else {
 
             }
-
-
         })
     })
 </script>

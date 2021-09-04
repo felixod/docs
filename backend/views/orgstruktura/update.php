@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\OrgStruktura */
 
-$this->title = 'Update Org Struktura: ' . $model->id_struktura;
-$this->params['breadcrumbs'][] = ['label' => 'Org Strukturas', 'url' => ['index']];
+$this->title = 'Обновление организационной единицы: ' . $model->id_struktura;
+$this->params['breadcrumbs'][] = ['label' => 'Организационная структура', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id_struktura, 'url' => ['view', 'id' => $model->id_struktura]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Обновить';
 ?>
 <div class="container">
     <div class="org-struktura-update">
