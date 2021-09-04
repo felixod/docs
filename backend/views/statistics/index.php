@@ -13,9 +13,7 @@ $this->title = 'Список пользователей';
 ?>
 <div class="container">
     <div class="file-user-index">
-
         <h1><?= Html::encode($this->title) ?></h1>
-
         <p>
             <?= Html::a('Назад', ['statistics/general'], ['class' => 'btn btn-info']) ?>
             <?= Html::a('Сформировать отчёт', ['statistics/reportword', 'id_file' => $_GET['id_file']], ['class' => 'btn btn-warning']) ?>
@@ -45,15 +43,18 @@ $this->title = 'Список пользователей';
                     ?>
                     <div class="accordion" id="accordionExample">
                         <div class="card">
-                            <div class="card-header" id="<?= $item[0]['id_file']?>">
+                            <div class="card-header" id="<?= $item[0]['id_file'] ?>">
                                 <h5 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#<?= str_replace(' ', '',$item[0]['name_struktura'])?>" aria-expanded="true" aria-controls="collapseOne">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#<?= str_replace(' ', '', $item[0]['name_struktura']) ?>"
+                                            aria-expanded="true" aria-controls="collapseOne">
                                         <?= $item[0]['name_struktura'] ?>
                                     </button>
                                 </h5>
                             </div>
 
-                            <div id="<?= str_replace(' ', '',$item[0]['name_struktura'])?>" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div id="<?= str_replace(' ', '', $item[0]['name_struktura']) ?>" class="collapse show"
+                                 aria-labelledby="headingOne" data-parent="#accordionExample">
                                 <div class="card-body">
                                     <h3></h3>
                                     <table class="table">
@@ -87,9 +88,7 @@ $this->title = 'Список пользователей';
                             </div>
                         </div>
                     </div>
-
-                    <?
-                } ?>
+                <?php } ?>
             <?php }
         } else {
             ?>
@@ -112,5 +111,5 @@ $this->title = 'Список пользователей';
             ]); ?>
         <?php } ?>
     </div>
-
+</div>
 </div>

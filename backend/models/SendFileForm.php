@@ -30,7 +30,6 @@ class SendFileForm extends Model
             'body' => 'Информация об документе',
             'dropList' => 'Вид документа',
             'file' => 'Ваш файл',
-
         ];
     }
 

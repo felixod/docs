@@ -39,13 +39,11 @@ $this->title = 'Готовые отчеты';
             <p></p>
             <?php
         }
-
         ?>
         <?php
         echo LinkPager::widget([
-            'pagination' => $pages,
+            'pagination' => $pages
         ]);
-    }
     ?>
-    <?php ?>
+    <?php }?>
 </div>
