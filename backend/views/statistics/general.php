@@ -14,9 +14,7 @@ $this->title = 'Общая статистика';
 ?>
 <div class="container">
     <?php
-
     foreach ($model as $category) {
-
         ?>
         <p></p>
         <div class="card-group">
@@ -32,9 +30,7 @@ $this->title = 'Общая статистика';
                 </div>
             </div>
         </div>
-    <?php }
-
-    ?>
+    <?php } ?>
     <p></p>
     <?php
     echo LinkPager::widget([
@@ -42,3 +38,4 @@ $this->title = 'Общая статистика';
     ]);
     ?>
 </div>
+

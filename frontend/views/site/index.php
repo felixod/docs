@@ -1,75 +1,76 @@
 <?php
 
-/* @var $this \yii\web\View */
-/* @var $content string */
+/* @var $this yii\web\View */
 
-use backend\assets\AppAsset;
-use yii\helpers\Html;
-use yii\bootstrap4\Nav;
-use yii\bootstrap4\NavBar;
-use yii\bootstrap4\Breadcrumbs;
-use common\widgets\Alert;
+use yii\helpers\Url;
 
-AppAsset::register($this);
-$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/backend/web/img/favicons.png']);
+$this->title = 'Информационная страница';
 ?>
-<?php $this->beginPage() ?>
-<!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
-<head>
-    <meta charset="<?= Yii::$app->charset ?>">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
-</head>
-<body>
-<?php $this->beginBody() ?>
+<div class="container">
+<?php foreach ($gr as $item) { ?>
 
-<div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => '<img src="/frontend/web/img/logow.png"/>',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar navbar-expand-md navbar fixed-top bg-light',
-        ],
-    ]);
-    try {
-        echo Nav::widget([
-            'options' => ['class' => 'collapse navbar-collapse navbar-nav mr-auto nav-link active'],
-            'encodeLabels' => false,
-            'items' => [
-                ['label' => 'Главная', 'url' => ['/site/index']],
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="<?= $item[0]['id_type_file']?>">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#<?=$item[0]['name_type_file']?>" aria-expanded="true" aria-controls="collapseOne">
+                            <?= $item[0]['name_type_file'] ?>
+                        </button>
+                    </h5>
+                </div>
 
-                Yii::$app->user->isGuest ? (
+                <div id="<?=$item[0]['name_type_file']?>" class="collapse show" aria-labelledby="headingOne" data-parent="#<?=$item[0]['name_type_file']?>">
+                    <div class="card-body">
+                        <h3></h3>
+                        <table class="table">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Номер документа</th>
+                                <th scope="col">Наименование</th>
+                                <th scope="col">Ссылка</th>
+                                <th scope="col">Статус документа</th>
+                                <th scope="col">Дата публикации</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php for ($i = 0; $i < count($item); $i++) {
+                                ?>
+                                <tr>
+                                    <th scope="row"><?= $item[$i]['id_file'] ?></th>
+                                    <td><?= $item[$i]['themes'] ?></td>
+                                    <td><a href="<?=Url::to(['sendfile/viewud', ], true)?>">Ссылка</a></td>
+                                    <td><?= $item[$i]['status']?></td>
+                                    <td><?= $item[$i]['date_file'] ?></td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                ['label' => 'Авторизация', 'url' => ['/site/login']]):
-                    [
-                        'label' => 'Выход (' . Yii::$app->user->identity->username . ')',
-                        'url' => ['/site/logout'],
-                        'linkOptions' => ['data-method' => 'post']
-                    ],
-            ],
-        ]);
-    } catch (Exception $e) {
-    }
-    NavBar::end();
-    ?>
 
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
+<?php } ?>
 </div>
 
-
-
-<?php $this->endBody() ?>
-</body>
-</html>
-<?php $this->endPage() ?>
+<!--<div class="container">-->
+<!--<div class="row">-->
+<!--    <div class="col-4">-->
+<!--        <div class="list-group" id="list-tab" role="tablist">-->
+<!--            <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>-->
+<!--            <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>-->
+<!--            <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>-->
+<!--            <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="col-8">-->
+<!--        <div class="tab-content" id="nav-tabContent">-->
+<!--            <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>-->
+<!--            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>-->
+<!--            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>-->
+<!--            <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->

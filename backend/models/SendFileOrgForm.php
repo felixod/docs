@@ -71,13 +71,14 @@ class SendFileOrgForm extends Model
 
         //todo заменить id структуры или выкинуть совсем
         $sql->id_struktur = Yii::$app->user->identity->org_struktur;
-        $sql->themes = $parent_file['themes'];
-        $sql->name_file = $parent_file['name_file'];
-        $sql->other_info = $model->body;
-        $sql->date_file = $date;
-        $sql->type_file = $parent_file['type_file'];
-        $sql->path = $parent_file['path'];
-        $sql->parent = $model->dropList;
+        $sql->themes = strip_tags($parent_file['themes']);
+        $sql->name_file = strip_tags($parent_file['name_file']);
+        $sql->other_info = strip_tags($model->body);
+        $sql->date_file = strip_tags($date);
+        $sql->type_file = strip_tags($parent_file['type_file']);
+        $sql->id_type_file = strip_tags($parent_file['id_type_file']);
+        $sql->path = strip_tags($parent_file['path']);
+        $sql->parent = strip_tags($model->dropList);
         $sql->save();
 
         //Возвращаю последний ID из Insert в MySQL
@@ -86,7 +87,7 @@ class SendFileOrgForm extends Model
         $sql_2 = new FileStatus();
         $sql_2->id_file = $save_id_f;
         $sql_2->status = 'Подписан';
-        $sql_2->date_status = $date;
+        $sql_2->date_status = strip_tags($date);
         $sql_2->save();
 
         foreach ($mas_em as $item) {

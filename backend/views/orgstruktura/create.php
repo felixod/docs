@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\OrgStruktura */
 
-$this->title = 'Create Org Struktura';
-$this->params['breadcrumbs'][] = ['label' => 'Org Strukturas', 'url' => ['index']];
+$this->title = 'Создание организационной структуры';
+$this->params['breadcrumbs'][] = ['label' => 'Организационная структура', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="container">

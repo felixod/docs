@@ -63,8 +63,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/back
                             ['label' => 'Новый документ', 'url' => ['/sendfile/sendu']],
                             ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
                         ]],
-                        ['label' => 'Стастистика', 'url' => ['/statistics/lkreport'], 'items' => [
+                        ['label' => 'Справочники', 'url' => ['/site/index'], 'items' => [
                             ['label' => 'Организационная структура', 'url' => ['orgstruktura/index']],
+                            ['label' => 'Вид документа', 'url' => ['/filetype/index']],
+                        ]],
+                        ['label' => 'Стастистика', 'url' => ['/statistics/lkreport'], 'items' => [
+
                             ['label' => 'Сформированные отчеты', 'url' => ['statistics/lkreport']],
                             ['label' => 'Общая стастистика', 'url' => ['/statistics/general']],],],
 
