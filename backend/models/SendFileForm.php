@@ -22,7 +22,8 @@ class SendFileForm extends Model
     public $file;
 
 
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'name' => 'Ваша тема',
             'email' => 'E-mail',
@@ -33,7 +34,8 @@ class SendFileForm extends Model
         ];
     }
 
-    public function rules() {
+    public function rules()
+    {
         return [
             // удалить пробелы для всех трех полей формы
             [['name', 'email', 'body'], 'trim'],
@@ -63,13 +65,13 @@ class SendFileForm extends Model
             ],
             // поле body должно быть не более 1000 символов
             [
-                'body',                'string',
+                'body', 'string',
                 'max' => 1000,
                 'tooLong' => 'Описание документа не может превышать 755 символов '
             ],
             // поле body должно быть не более 1000 символов
             [
-                'body_email',                'string',
+                'body_email', 'string',
                 'max' => 1000,
                 'tooLong' => 'Сообщение должно быть длиной не более 1000 символов'
             ],
@@ -88,11 +90,11 @@ class SendFileForm extends Model
 
             if ($model->file && $model->validate()) {
                 $namefile = strip_tags($model->file->baseName);
-                $structure = Yii::getAlias('@webroot') . '/uploads/'.Yii::$app->user->identity->orgstruktur.'/';
+                $structure = Yii::getAlias('@webroot') . '/uploads/' . Yii::$app->user->identity->orgstruktur . '/';
                 if (!is_dir($structure)) {
                     mkdir($structure, 0777, true);
                 }
-                $pathf = strip_tags('/uploads/'.Yii::$app->user->identity->orgstruktur.'/'. $model->file->baseName . '.' . $model->file->extension);
+                $pathf = strip_tags('/uploads/' . Yii::$app->user->identity->orgstruktur . '/' . $model->file->baseName . '.' . $model->file->extension);
                 $typef = strip_tags($model->file->type);
                 $model->file->saveAs($structure . $model->file->baseName . '.' . $model->file->extension);
             }
@@ -128,45 +130,46 @@ class SendFileForm extends Model
         foreach ($mas_em as $item) {
 
             $full_name = explode('-', strip_tags($item));
-            $full_user_email = preg_replace('/\s/', '', $full_name[1]);
+            if ($full_name[0] != "") {
+                $full_user_email = preg_replace('/\s/', '', $full_name[1]);
 
-            $sql_3 = new FileUser();
-            $sql_3->id_file = $save_id_f;
-            $sql_3->full_name = $full_name[0];
-            $sql_3->email = $full_user_email;
-            $sql_3->confirm = '0';
-            $sql_3->signature = '';
-            $sql_3->date_confirm = $date;
-            $sql_3->save();
+                $sql_3 = new FileUser();
+                $sql_3->id_file = $save_id_f;
+                $sql_3->full_name = $full_name[0];
+                $sql_3->email = $full_user_email;
+                $sql_3->confirm = '0';
+                $sql_3->signature = '';
+                $sql_3->date_confirm = $date;
+                $sql_3->save();
 
-            $save_id_file_user = Yii::$app->db->getLastInsertID();
+                $save_id_file_user = Yii::$app->db->getLastInsertID();
 
 
-            $email = $full_user_email;
+                $email = $full_user_email;
 
-            $validator = new EmailValidator();
-            if ($validator->validate($email, $error)) {
+                $validator = new EmailValidator();
+                if ($validator->validate($email, $error)) {
 
-                $path_ozn = Url::to(['sendfile/viewud', 'id_file' => $save_id_f, 'id_file_user' => $save_id_file_user], true);
-                $htmlBody = '<p>Уважаемый пользователь, '.$full_name[0].'.</p>';
-                $htmlBody .= '<p> Пройдите по ссылке из этого письма для ознакомления с новым документом.</p>';
-                $htmlBody .= "<a href=$path_ozn>Ссылка для ознакомления</a>";
-                $htmlBody .= '<p>'.$model->body_email.'</p>';
-                $htmlBody .= '<p>С Уважением, СамГУПС';
-                Yii::$app->mailer->compose()
-                    ->setFrom(Yii::$app->params['senderEmail'])
-                    ->setTo([
-                        strip_tags($full_user_email)
-                    ])
-                    ->setSubject('Уведомление о новом документ')
-                    ->setHtmlBody($htmlBody)
-                    ->send();
+                    $path_ozn = Url::to(['sendfile/viewud', 'id_file' => $save_id_f, 'id_file_user' => $save_id_file_user], true);
+                    $htmlBody = '<p>Уважаемый пользователь, ' . $full_name[0] . '.</p>';
+                    $htmlBody .= '<p> Пройдите по ссылке из этого письма для ознакомления с новым документом.</p>';
+                    $htmlBody .= "<a href=$path_ozn>Ссылка для ознакомления</a>";
+                    $htmlBody .= '<p>' . $model->body_email . '</p>';
+                    $htmlBody .= '<p>С Уважением, СамГУПС';
+                    Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['senderEmail'])
+                        ->setTo([
+                            strip_tags($full_user_email)
+                        ])
+                        ->setSubject('Уведомление о новом документ')
+                        ->setHtmlBody($htmlBody)
+                        ->send();
 
-            } else {
-                $error;
+                } else {
+                    $error;
+                }
+
             }
-
-
 
         }
 

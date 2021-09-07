@@ -95,6 +95,7 @@
       <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-select2" />
       <path value="$PROJECT_DIR$/vendor/select2/select2" />
       <path value="$PROJECT_DIR$/vendor/phpexcel/phpexcel" />
+      <path value="$PROJECT_DIR$/vendor/phpoffice/phpexcel" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration">
