@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 'On');
-error_reporting(E_STRICT);
 
 use yii\bootstrap4\LinkPager;
 use yii\helpers\Html;
