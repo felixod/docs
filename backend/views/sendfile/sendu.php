@@ -17,16 +17,16 @@ $this->title = 'Рассылка';
  */
 Yii::$app->params['bsVersion'] = '4.x';
 
-if (Yii::$app->session->hasFlash('sendu-data')) {
-    $data = Yii::$app->session->getFlash('sendu-data');
-    $name = Html::encode($data['name']);
-    $email = Html::encode($data['email']);
-    $body_email = Html::encode($data['body_email']);
-    $body = Html::encode($data['body']);
-    $file = Html::encode($data['file']);
-    $dropList = Html::encode($data['dropList']);
-
-}
+//if (Yii::$app->session->hasFlash('sendu-data')) {
+//    $data = Yii::$app->session->getFlash('sendu-data');
+//    $name = Html::encode($data['name']);
+//    $email = Html::encode($data['email']);
+//    $body_email = Html::encode($data['body_email']);
+//    $body = Html::encode($data['body']);
+//    $file = Html::encode($data['file']);
+//    $dropList = Html::encode($data['dropList']);
+//
+//}
 
 ?>
 <div class="container">
@@ -39,17 +39,17 @@ if (Yii::$app->session->hasFlash('sendu-data')) {
         'class' => 'form-horizontal']]); ?>
 
 
-    <?= $form->field($model, 'name')->textInput(['value' => $name, 'placeholder' => 'Приказ № 0000 от 00.00.0000', 'id' => 'name']); ?>
-    <?= $form->field($model, 'email')->textinput(['value' => $email, 'placeholder' => 'Иванов Иван Иванович - test@sgups.ru; Сергеев Иван Сергеевич - test2@test.ru; ', 'id' => 'email']); ?>
-    <?= $form->field($model, 'body_email')->textarea(['rows' => 5, 'placeholder' => 'Ознакомиться с документом до 00.00.0000', 'value' => $body_email, 'id' => 'body_email']); ?>
-    <?= $form->field($model, 'body')->textarea(['rows' => 5, 'placeholder' => 'В документе содержится информация об ....', 'value' => $body, 'id' => 'body']); ?>
+    <?= $form->field($model, 'name')->textInput([ 'placeholder' => 'Приказ № 0000 от 00.00.0000', 'id' => 'name']); ?>
+    <?= $form->field($model, 'email')->textinput([ 'placeholder' => 'Иванов Иван Иванович - test@sgups.ru; Сергеев Иван Сергеевич - test2@test.ru; ', 'id' => 'email']); ?>
+    <?= $form->field($model, 'body_email')->textarea(['rows' => 5, 'placeholder' => 'Ознакомиться с документом до 00.00.0000', 'id' => 'body_email']); ?>
+    <?= $form->field($model, 'body')->textarea(['rows' => 5, 'placeholder' => 'В документе содержится информация об ....', 'id' => 'body']); ?>
     <?= $form->field($model, 'dropList')->widget(Select2::classname(), [
         'data' => $items,
         'id' => 'dropList',
         'options' => ['placeholder' => 'Выберите тип документа'],
         'class' => 'form-control',
     ])->label('Документ') ?>
-    <?= $form->field($model, 'file')->fileInput(['class' => '', 'id' => 'file', 'value' => $file]) ?>
+    <?= $form->field($model, 'file')->fileInput(['class' => '', 'id' => 'file']) ?>
 
     <div class="text-center">
         <div class="spinner-grow" style="width: 3rem; height: 3rem; display: none" role="status">

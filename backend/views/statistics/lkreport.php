@@ -31,21 +31,20 @@ $this->title = 'Готовые отчеты';
                     <p>Дата и время подписания: <?= $category['date_gener'] ?></p>
                     <p>Подписал: <?= $category['full_name'] ?></p>
                     <p class="card-text"><?= $category['other_info'] ?></p>
-                    <a href="<?= Url::to(['/reportPHPWord/' . $category['id_user'] . '/' . $category['id_file'] . '/' . $category['name_report']])?>"
+                    <a href="<?= Url::to(['/reportPHPWord/' . $category['id_user'] . '/' . $category['id_file'] . '/' . $category['name_report']]) ?>"
                        class="btn btn-primary"><?= $category['name_report'] ?></a>
-                    <!--                    <a href="--><?//= '..web/reportPHPWord/' . $category['id_user'] . '/' . $category['id_file'] . '/' . $category['name_report'] ?><!--"-->
+                    <!--                    <a href="-->
+                    <?//= '..web/reportPHPWord/' . $category['id_user'] . '/' . $category['id_file'] . '/' . $category['name_report'] ?><!--"-->
                 </div>
             </div>
             <p></p>
             <?php
         }
-
         ?>
         <?php
         echo LinkPager::widget([
-            'pagination' => $pages,
+            'pagination' => $pages
         ]);
     }
     ?>
-    <?php ?>
 </div>

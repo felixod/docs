@@ -12,17 +12,17 @@ $this->title = 'Рассылка';
 //Определяем версию  загрузки версии
 Yii::$app->params['bsVersion'] = '4.x';
 
-/*
- * Если данные формы не прошли валидацию, получаем из сессии сохраненные
- * данные, чтобы заполнить ими поля формы, не заставляя пользователя
- * заполнять форму повторно
- */
-if (Yii::$app->session->hasFlash('sendu-data')) {
-    $data = Yii::$app->session->getFlash('sendu-data');
-    $name = Html::encode($data['name']);
-    $email = Html::encode($data['email']);
-    $body = Html::encode($data['body']);
-}
+///*
+// * Если данные формы не прошли валидацию, получаем из сессии сохраненные
+// * данные, чтобы заполнить ими поля формы, не заставляя пользователя
+// * заполнять форму повторно
+// */
+//if (Yii::$app->session->hasFlash('sendu-data')) {
+//    $data = Yii::$app->session->getFlash('sendu-data');
+//    $name = Html::encode($data['name']);
+//    $email = Html::encode($data['email']);
+//    $body = Html::encode($data['body']);
+//}
 ?>
 <div class="container">
     <p></p>
@@ -34,9 +34,9 @@ if (Yii::$app->session->hasFlash('sendu-data')) {
         'class' => 'form-horizontal']]); ?>
 
     <? //= $form->field($model, 'name')->textInput(['value' => $name]); ?>
-    <?= $form->field($model, 'email')->textinput(['value' => $email, 'placeholder' => 'Иванов Иван Иванович - test@sgups.ru; Сергеев Иван Сергеевич - test2@test.ru; ', 'id' => 'email']); ?>
-    <?= $form->field($model, 'body_email')->textarea(['rows' => 5, 'placeholder' => 'Ознакомиться с документом до 00.00.0000', 'value' => $body, 'id' => 'body_email']); ?>
-    <?= $form->field($model, 'body')->textarea(['rows' => 5, 'placeholder' => 'В документе содержится информация об ....', 'value' => $body, 'id' => 'body']); ?>
+    <?= $form->field($model, 'email')->textinput(['placeholder' => 'Иванов Иван Иванович - test@sgups.ru; Сергеев Иван Сергеевич - test2@test.ru; ', 'id' => 'email']); ?>
+    <?= $form->field($model, 'body_email')->textarea(['rows' => 5, 'placeholder' => 'Ознакомиться с документом до 00.00.0000','id' => 'body_email']); ?>
+    <?= $form->field($model, 'body')->textarea(['rows' => 5, 'placeholder' => 'В документе содержится информация об ....', 'id' => 'body']); ?>
     <?= $form->field($model, 'dropList')->widget(Select2::classname(), [
         'data' => $items,
         'id' => 'dropList',
