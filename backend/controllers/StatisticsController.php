@@ -68,6 +68,7 @@ class StatisticsController extends Controller
 
         $searchModel = new FileUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id_file);
+
         //  todo вернуться и добавить документы имеющие родственников
         $query_2 = File::find('id_file')->where(['parent' => $id_file])->all();
         $institut = [];
@@ -97,7 +98,7 @@ class StatisticsController extends Controller
      */
     public function actionLkreport()
     {
-        $pathUser = '../web/reportPHPWord/' . Yii::$app->user->id . '/';
+        $pathUser = '../web/reportPHPExcel/' . Yii::$app->user->id . '/';
         $dir = $pathUser;
         $id_user = Yii::$app->user->id;
 
@@ -218,6 +219,6 @@ class StatisticsController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Запрошенная страница не существует.');
     }
 }
