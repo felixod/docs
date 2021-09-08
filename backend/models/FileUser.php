@@ -52,11 +52,11 @@ class FileUser extends \yii\db\ActiveRecord
         return [
             'id_file_user' => 'Id File User',
             'id_file' => 'Id File',
-            'full_name' => 'Full Name',
-            'email' => 'Email',
-            'confirm' => 'Confirm',
-            'signature' => 'Signature',
-            'date_confirm' => 'Date Confirm',
+            'full_name' => 'ФИО',
+            'email' => 'Электронная почта',
+            'confirm' => 'Ознакомился',
+            'signature' => 'Цифровой идентификатор ознакомления',
+            'date_confirm' => 'Дата ознакомления / уведомления',
         ];
     }
 

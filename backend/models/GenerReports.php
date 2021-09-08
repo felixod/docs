@@ -123,7 +123,7 @@ class GenerReports extends \yii\db\ActiveRecord
      */
     public static function generateHash($length)
     {
-        $chars = 'abdefhiknrstyzABDEFGHKNQRSTYZ23456789';
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
         $numChars = strlen($chars);
         $string = '';
         for ($i = 0; $i < $length; $i++) {
@@ -132,6 +132,12 @@ class GenerReports extends \yii\db\ActiveRecord
         return $string;
     }
 
+    /**
+     * @param $id_user
+     * @param $pagination
+     * @return array|\yii\db\DataReader
+     * @throws \yii\db\Exception
+     */
     public static function allReports($id_user, $pagination)
     {
         $model = Yii::$app->db->createCommand('
@@ -165,6 +171,14 @@ class GenerReports extends \yii\db\ActiveRecord
         return $model;
     }
 
+    /**
+     * @param $id_file
+     * @return array|\yii\db\ActiveRecord|null
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     * @throws \PHPExcel_Writer_Exception
+     * @throws \yii\db\Exception
+     */
     public static function generateReportWord($id_file)
     {
 
@@ -180,69 +194,10 @@ class GenerReports extends \yii\db\ActiveRecord
         $structure_path = '../reportPHPExcel/' . $id_user . '/' . $id_file . '/' . $report_name;
 
         if (!is_dir($structure)) {
-            mkdir($structure, 0777, true);
+            mkdir($structure, 0750, true);
         }
 
         GenerReports::clear_dir($structure);
-
-
-//        $xls = new \PHPExcel();
-//
-//        $id_user = Yii::$app->user->id;
-//        $structure = '../web/reportPHPExcel/' . $id_user . '/' . $id_file . '/';
-//        $date = date('Y-m-d H:i:s');
-//        $unixDate = strtotime($date);
-//
-//        $report_name = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
-//        $full_path = $structure . $report_name;
-//        $full_name_report = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
-//        $structure_path = '../reportPHPExcel/' . $id_user . '/' . $id_file . '/' . $report_name;
-//
-//        if (!is_dir($structure)) {
-//            mkdir($structure, 0777, true);
-//        }
-//
-//        GenerReports::clear_dir($structure);
-//
-//
-//        $aSheet = $xls->getActiveSheet();
-//
-//        $aSheet->mergeCells('A1:E1');
-//        $aSheet->getRowDimension('1')->setRowHeight(20);
-//        $aSheet->setCellValue('A1', 'ОТЧЕТ');
-//
-//        //Ширина столбцов
-//        $aSheet->getColumnDimension('A')->setWidth(50);
-//        $aSheet->getColumnDimension('B')->setWidth(13);
-//        $aSheet->getColumnDimension('C')->setWidth(40);
-//        $aSheet->getColumnDimension('D')->setWidth(20);
-//
-//
-//        //Наименование столбцов
-//        $aSheet->setCellValue('A2', 'ФИО');
-//        $aSheet->setCellValue('B2', 'Ознакомился');
-//        $aSheet->setCellValue('C2', 'Цифровой идентификатор ознакомления');
-//        $aSheet->setCellValue('D2', 'Дата ознакомления');
-//
-//
-//        $gttest = FileUser::find()->where(['id_file' => $id_file])->all();
-//        $i = 2;
-//        foreach ($gttest as $item) {
-//            $aSheet->setCellValue('A' . ($i + 1), $item['full_name']);
-//            if ($item['confirm'] == '1') {
-//                $aSheet->setCellValue('B' . ($i + 1), 'Да');
-//            } else {
-//                $aSheet->setCellValue('B' . ($i + 1), 'Нет');
-//            }
-//            $aSheet->setCellValue('C' . ($i + 1), $item['signature']);
-//            if (!empty($item['signature'])) {
-//                $aSheet->setCellValue('D' . ($i + 1), $item['date_confirm']);
-//            }
-//            $i++;
-//        }
-//
-//        $objWriter = new PHPExcel_Writer_Excel2007($xls);
-//        $objWriter->save($full_path);
 
         $find = GenerReports::find()->where(['id_file' => $id_file])->one();
 
@@ -253,7 +208,7 @@ class GenerReports extends \yii\db\ActiveRecord
             $report->id_file = $id_file;
             $report->name_report = $full_name_report;
             $report->date_gener = $date;
-            $report->caption = GenerReports::generateHash(16);
+            $report->caption = GenerReports::generateHash(32);
             $report->save();
 
             $model = Yii::$app->db->createCommand('
@@ -299,9 +254,9 @@ class GenerReports extends \yii\db\ActiveRecord
             $aSheet->setCellValue('D2', 'Дата ознакомления');
 
 
-            $gttest = FileUser::find()->where(['id_file' => $id_file])->all();
+            $item_fileuser = FileUser::find()->where(['id_file' => $id_file])->all();
             $i = 2;
-            foreach ($gttest as $item) {
+            foreach ($item_fileuser as $item) {
                 $aSheet->setCellValue('A' . ($i + 1), $item['full_name']);
                 if ($item['confirm'] == '1') {
                     $aSheet->setCellValue('B' . ($i + 1), 'Да');
@@ -326,7 +281,7 @@ class GenerReports extends \yii\db\ActiveRecord
             $report_upd = $find;
             $report_upd->date_gener = $date;
             $report_upd->name_report = $full_name_report;
-            $report_upd->caption = GenerReports::generateHash(16);
+            $report_upd->caption = GenerReports::generateHash(32);
             $report_upd->save();
 
             $model = Yii::$app->db->createCommand('
@@ -378,9 +333,9 @@ class GenerReports extends \yii\db\ActiveRecord
             $aSheet->setCellValue('D2', 'Дата ознакомления');
 
 
-            $gttest = FileUser::find()->where(['id_file' => $id_file])->all();
+            $item_fileuser = FileUser::find()->where(['id_file' => $id_file])->all();
             $i = 2;
-            foreach ($gttest as $item) {
+            foreach ($item_fileuser as $item) {
                 $aSheet->setCellValue('A' . ($i + 1), $item['full_name']);
                 if ($item['confirm'] == '1') {
                     $aSheet->setCellValue('B' . ($i + 1), 'Да');

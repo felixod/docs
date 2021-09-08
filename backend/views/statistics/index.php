@@ -10,7 +10,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Список пользователей';
-//$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="container">
@@ -21,7 +21,7 @@ $this->title = 'Список пользователей';
             <?= Html::a('Сформировать отчёт', ['statistics/reportword', 'id_file' => $_GET['id_file']], ['class' => 'btn btn-warning']) ?>
         </p>
 
-        <?php if (Yii::$app->user->can('supermoderator')) { ?>
+        <?php if (Yii::$app->user->can('admin')) { ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
@@ -30,8 +30,8 @@ $this->title = 'Список пользователей';
                 ],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-                    'id_file_user',
-                    'id_file',
+//                    'id_file_user',
+//                    'id_file',
                     'full_name',
                     'email:email',
                     'confirm',
@@ -106,8 +106,6 @@ $this->title = 'Список пользователей';
                 ],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-                    'id_file_user',
-                    'id_file',
                     'full_name',
                     'email:email',
                     'confirm',

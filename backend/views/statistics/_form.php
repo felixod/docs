@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'date_confirm')->textInput()->label('Дата последнего изменения статуса') ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success', 'id_file' => $_GET['id_file']]) ?>
+            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
