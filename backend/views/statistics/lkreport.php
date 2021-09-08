@@ -28,13 +28,13 @@ $this->title = 'Готовые отчеты';
                 </div>
                 <div class="card-body">
                     <h5 class="card-title"><?= $category['themes'] ?></h5>
-                    <p>Дата и время подписания: <?= $category['date_gener'] ?></p>
+                    <p>Дата подписания: <?= $category['date_gener'] ?></p>
                     <p>Подписал: <?= $category['full_name'] ?></p>
                     <p class="card-text"><?= $category['other_info'] ?></p>
-                    <a href="<?= Url::to(['/reportPHPWord/' . $category['id_user'] . '/' . $category['id_file'] . '/' . $category['name_report']]) ?>"
+                    <a href="<?= Url::to(['/reportPHPExcel/' . $category['id_user'] . '/' . $category['id_file'] . '/' . $category['name_report']]) ?>"
                        class="btn btn-primary"><?= $category['name_report'] ?></a>
                     <!--                    <a href="-->
-                    <?//= '..web/reportPHPWord/' . $category['id_user'] . '/' . $category['id_file'] . '/' . $category['name_report'] ?><!--"-->
+                    <?//= '..web/reportPHPExcel/' . $category['id_user'] . '/' . $category['id_file'] . '/' . $category['name_report'] ?><!--"-->
                 </div>
             </div>
             <p></p>
@@ -45,6 +45,6 @@ $this->title = 'Готовые отчеты';
         echo LinkPager::widget([
             'pagination' => $pages
         ]);
-    }
-    ?>
+        ?>
+    <?php } ?>
 </div>

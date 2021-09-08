@@ -97,7 +97,7 @@ class StatisticsController extends Controller
      */
     public function actionLkreport()
     {
-        $pathUser = '../web/reportPHPWord/' . Yii::$app->user->id . '/';
+        $pathUser = '../web/reportPHPExcel/' . Yii::$app->user->id . '/';
         $dir = $pathUser;
         $id_user = Yii::$app->user->id;
 

@@ -93,44 +93,48 @@ class SendFileOrgForm extends Model
         foreach ($mas_em as $item) {
 
             $full_name = explode('-', strip_tags($item));
-            $full_user_email = preg_replace('/\s/', '', $full_name[1]);
-
-            $sql_3 = new FileUser();
-            $sql_3->id_file = $save_id_f;
-            $sql_3->full_name = $full_name[0];
-            $sql_3->email = $full_user_email;
-            $sql_3->confirm = '0';
-            $sql_3->signature = '';
-            $sql_3->date_confirm = $date;
-            $sql_3->save();
-
-            $save_id_file_user = Yii::$app->db->getLastInsertID();
+//            var_dump($full_name);
+            if ($full_name[0] != "") {
 
 
-            $email = $full_user_email;
+                $full_user_email = preg_replace('/\s/', '', $full_name[1]);
 
-            $validator = new EmailValidator();
-            if ($validator->validate($email, $error)) {
+                $sql_3 = new FileUser();
+                $sql_3->id_file = $save_id_f;
+                $sql_3->full_name = $full_name[0];
+                $sql_3->email = $full_user_email;
+                $sql_3->confirm = '0';
+                $sql_3->signature = '';
+                $sql_3->date_confirm = $date;
+                $sql_3->save();
 
-                $path_ozn = Url::to(['sendfile/viewud', 'id_file' => $save_id_f, 'id_file_user' => $save_id_file_user], true);
-                $htmlBody = '<p>Уважаемый пользователь, '.$full_name[0].'.</p>';
-                $htmlBody .= '<p> Пройдите по ссылке из этого письма для ознакомления с новым документом.</p>';
-                $htmlBody .= "<a href=$path_ozn>Ссылка для ознакомления</a>";
-                $htmlBody .= '<p>'.$model->body_email.'</p>';
-                $htmlBody .= '<p>С Уважением, СамГУПС';
-                Yii::$app->mailer->compose()
-                    ->setFrom(Yii::$app->params['senderEmail'])
-                    ->setTo([
-                        strip_tags($full_user_email)
-                    ])
-                    ->setSubject('Уведомление о новом документ')
-                    ->setHtmlBody($htmlBody)
-                    ->send();
+                $save_id_file_user = Yii::$app->db->getLastInsertID();
 
-            } else {
-                $error;
+
+                $email = $full_user_email;
+
+                $validator = new EmailValidator();
+                if ($validator->validate($email, $error)) {
+
+                    $path_ozn = Url::to(['sendfile/viewud', 'id_file' => $save_id_f, 'id_file_user' => $save_id_file_user], true);
+                    $htmlBody = '<p>Уважаемый пользователь, ' . $full_name[0] . '.</p>';
+                    $htmlBody .= '<p> Пройдите по ссылке из этого письма для ознакомления с новым документом.</p>';
+                    $htmlBody .= "<a href=$path_ozn>Ссылка для ознакомления</a>";
+                    $htmlBody .= '<p>' . $model->body_email . '</p>';
+                    $htmlBody .= '<p>С Уважением, СамГУПС';
+                    Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['senderEmail'])
+                        ->setTo([
+                            strip_tags($full_user_email)
+                        ])
+                        ->setSubject('Уведомление о новом документ')
+                        ->setHtmlBody($htmlBody)
+                        ->send();
+
+                } else {
+                    $error;
+                }
             }
-
 
         }
 

@@ -1,7 +1,9 @@
 <?php
 
+use yii\bootstrap4\LinkPager;
 use yii\helpers\Html;
 use yii\grid\GridView;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\FileUserSearch */
@@ -18,11 +20,14 @@ $this->title = 'Список пользователей';
             <?= Html::a('Назад', ['statistics/general'], ['class' => 'btn btn-info']) ?>
             <?= Html::a('Сформировать отчёт', ['statistics/reportword', 'id_file' => $_GET['id_file']], ['class' => 'btn btn-warning']) ?>
         </p>
-        <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
+
         <?php if (Yii::$app->user->can('supermoderator')) { ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
+                'pager' => [
+                    'class' => '\yii\bootstrap4\LinkPager'
+                ],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     'id_file_user',
@@ -34,6 +39,7 @@ $this->title = 'Список пользователей';
                     'date_confirm',
                     [
                         'class' => 'yii\grid\ActionColumn',
+
                     ],
                 ],
             ]);
@@ -95,10 +101,11 @@ $this->title = 'Список пользователей';
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
+                'pager' => [
+                    'class' => '\yii\bootstrap4\LinkPager'
+                ],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-
-
                     'id_file_user',
                     'id_file',
                     'full_name',
@@ -106,7 +113,6 @@ $this->title = 'Список пользователей';
                     'confirm',
                     'signature',
                     'date_confirm',
-
                 ],
             ]);
         } ?>
