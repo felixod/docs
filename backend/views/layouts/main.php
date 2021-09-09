@@ -66,10 +66,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/back
                             ['label' => 'Вид документа', 'url' => ['/filetype/index']],
                         ]],
                         ['label' => 'Стастистика', 'items' => [
-
-                            ['label' => 'Сформированные отчеты', 'url' => ['statistics/lkreport']],
-                            ['label' => 'Общая стастистика', 'url' => ['/statistics/general']],],],
-
+                            ['label' => 'Общая статистика', 'url' => ['/statistics/general']],],],
                         Yii::$app->user->isGuest ? (
 
                         ['label' => 'Авторизация', 'url' => ['/site/login']]) :
@@ -94,8 +91,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/back
                             ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
                         ]],
                         ['label' => 'Стастистика', 'items' => [
-                            ['label' => 'Сформированные отчеты', 'url' => ['statistics/lkreport']],
-                            ['label' => 'Общая стастистика', 'url' => ['/statistics/general']],],],
+                            ['label' => 'Общая статистика', 'url' => ['/statistics/general']],],],
 
                         Yii::$app->user->isGuest ? (
 

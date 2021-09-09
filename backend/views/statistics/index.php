@@ -1,8 +1,10 @@
 <?php
 
+use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\LinkPager;
 use yii\helpers\Html;
 use yii\grid\GridView;
+
 
 
 /* @var $this yii\web\View */
@@ -18,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1><?= Html::encode($this->title) ?></h1>
         <p>
             <?= Html::a('Назад', ['statistics/general'], ['class' => 'btn btn-info']) ?>
-            <?= Html::a('Сформировать отчёт', ['statistics/reportword', 'id_file' => $_GET['id_file']], ['class' => 'btn btn-warning']) ?>
+            <?= Html::a('Сформировать отчёт', ['statistics/reportexcel', 'id_file'=>$_GET['id_file']], ['class' => 'btn btn-warning']) ?>
         </p>
 
         <?php if (Yii::$app->user->can('admin')) { ?>
