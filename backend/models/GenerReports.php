@@ -132,44 +132,6 @@ class GenerReports extends \yii\db\ActiveRecord
         return $string;
     }
 
-    /**
-     * @param $id_user
-     * @param $pagination
-     * @return array|\yii\db\DataReader
-     * @throws \yii\db\Exception
-     */
-    public static function allReports($id_user, $pagination)
-    {
-        $model = Yii::$app->db->createCommand('
-                    SELECT
-                        gener_reports.id_report,
-                        file.id_file as id_file,
-                        file.id_user,
-                        file.other_info,
-                        file.themes,
-                        gener_reports.date_gener,
-                        gener_reports.name_report,
-                        user.full_name
-                    FROM
-                        gener_reports
-                    JOIN
-                        file
-                    ON
-                        file.id_file = gener_reports.id_file
-                    JOIN
-                        user
-                    ON 
-                        gener_reports.id_user = user.id
-                    WHERE
-                        gener_reports.id_user =' . $id_user . '
-
-                    LIMIT ' . $pagination->limit
-            . '
-                    OFFSET ' . $pagination->offset)->queryAll();
-
-        Yii::$app->session->setFlash('success_report', "Отчет сформирован");
-        return $model;
-    }
 
     /**
      * @param $id_file
@@ -179,185 +141,78 @@ class GenerReports extends \yii\db\ActiveRecord
      * @throws \PHPExcel_Writer_Exception
      * @throws \yii\db\Exception
      */
-    public static function generateReportWord($id_file)
+    public static function generateReportExcel($id_file)
     {
-
-
         $id_user = Yii::$app->user->id;
-        $structure = '../web/reportPHPExcel/' . $id_user . '/' . $id_file . '/';
-        $date = date('Y-m-d H:i:s');
-        $unixDate = strtotime($date);
+        $structure = '../web/reportPHPExcel/';
+        $date = date('Y-m-d');
 
         $report_name = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
         $full_path = $structure . $report_name;
-        $full_name_report = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
-        $structure_path = '../reportPHPExcel/' . $id_user . '/' . $id_file . '/' . $report_name;
 
-        if (!is_dir($structure)) {
-            mkdir($structure, 0750, true);
-        }
 
-        GenerReports::clear_dir($structure);
-
-        $find = GenerReports::find()->where(['id_file' => $id_file])->one();
-
-        if ($find == null) {
-
-            $report = new GenerReports();
-            $report->id_user = $id_user;
-            $report->id_file = $id_file;
-            $report->name_report = $full_name_report;
-            $report->date_gener = $date;
-            $report->caption = GenerReports::generateHash(32);
-            $report->save();
-
-            $model = Yii::$app->db->createCommand('
+        $model = Yii::$app->db->createCommand('
                     SELECT
-                        gener_reports.id_report,
                         file.id_file as id_file,
                         file.id_user,
                         file.other_info,
                         file.themes,
-                        gener_reports.date_gener,
-                        gener_reports.name_report
+                        user.full_name
                     FROM
-                        gener_reports
-                    JOIN
                         file
-                    ON
-                        file.id_file = gener_reports.id_file
-                    WHERE
-                        gener_reports.id_report =' . Yii::$app->db->getLastInsertID())->queryOne();
-
-            $xls = PHPExcel_IOFactory::load('../web/reportPHPExcel/template_xlsx.xlsx');
-            $aSheet = $xls->getActiveSheet();
-
-            //Ширина столбцов
-            $aSheet->getColumnDimension('A')->setWidth(50);
-            $aSheet->getColumnDimension('B')->setWidth(13);
-            $aSheet->getColumnDimension('C')->setWidth(40);
-            $aSheet->getColumnDimension('D')->setWidth(20);
-
-
-            $aSheet->setCellValue('A1', ' 
-                        ОТЧЕТ
-                         
-                        Отчет ознакомления с документом «'.$model['themes'].'».
-                        Дата размещения документа в системе (https://docs.samgups.ru): '.$model['date_gener'].' г.
-                        Дата завершения ознакомления: '.$model['date_gener'].' г.
-                        Отчет сгенерировал: '.$model['full_name']);
-
-            //Наименование столбцов
-            $aSheet->setCellValue('A2', 'ФИО');
-            $aSheet->setCellValue('B2', 'Ознакомился');
-            $aSheet->setCellValue('C2', 'Цифровой идентификатор ознакомления');
-            $aSheet->setCellValue('D2', 'Дата ознакомления');
-
-
-            $item_fileuser = FileUser::find()->where(['id_file' => $id_file])->all();
-            $i = 2;
-            foreach ($item_fileuser as $item) {
-                $aSheet->setCellValue('A' . ($i + 1), $item['full_name']);
-                if ($item['confirm'] == '1') {
-                    $aSheet->setCellValue('B' . ($i + 1), 'Да');
-                } else {
-                    $aSheet->setCellValue('B' . ($i + 1), 'Нет');
-                }
-                $aSheet->setCellValue('C' . ($i + 1), $item['signature']);
-                if (!empty($item['signature'])) {
-                    $aSheet->setCellValue('D' . ($i + 1), $item['date_confirm']);
-                }
-                $i++;
-            }
-
-            $objWriter = new PHPExcel_Writer_Excel2007($xls);
-            $objWriter->save($full_path);
-
-            Yii::$app->session->setFlash('success_report', "Отчет сформирован");
-            return [$model, $structure_path];
-
-        } elseif ($find != null) {
-
-            $report_upd = $find;
-            $report_upd->date_gener = $date;
-            $report_upd->name_report = $full_name_report;
-            $report_upd->caption = GenerReports::generateHash(32);
-            $report_upd->save();
-
-            $model = Yii::$app->db->createCommand('
-                    SELECT
-                        gener_reports.id_report,
-                        file.id_file as id_file,
-                        file.id_user,
-                        file.other_info,
-                        file.themes,
-                        user.full_name,
-                        DATE_FORMAT( gener_reports.date_gener , "%d.%m.%y" )  AS date_gener ,
-                        gener_reports.name_report
-                    FROM
-                        gener_reports
-                    JOIN
-                        file
-                    ON
-                        file.id_file = gener_reports.id_file
                     JOIN 
                         user
-                    ON
-                        gener_reports.id_user = user.id
                     WHERE
-                        gener_reports.id_file =' . $id_file)->queryOne();
+                        file.id_user = user.id')->queryOne();
 
 
-            $xls = PHPExcel_IOFactory::load('../web/reportPHPExcel/template_xlsx.xlsx');
-            $aSheet = $xls->getActiveSheet();
+        $xls = PHPExcel_IOFactory::load('../web/reportPHPExcel/template_xlsx.xlsx');
+        $aSheet = $xls->getActiveSheet();
 
-            //Ширина столбцов
-            $aSheet->getColumnDimension('A')->setWidth(50);
-            $aSheet->getColumnDimension('B')->setWidth(13);
-            $aSheet->getColumnDimension('C')->setWidth(40);
-            $aSheet->getColumnDimension('D')->setWidth(20);
+        //Ширина столбцов
+        $aSheet->getColumnDimension('A')->setWidth(50);
+        $aSheet->getColumnDimension('B')->setWidth(13);
+        $aSheet->getColumnDimension('C')->setWidth(40);
+        $aSheet->getColumnDimension('D')->setWidth(20);
 
 
-            $aSheet->setCellValue('A1', ' 
+        $aSheet->setCellValue('A1', '
                         ОТЧЕТ
-                         
-                        Отчет ознакомления с документом «'.$model['themes'].'».
-                        Дата размещения документа в системе (https://docs.samgups.ru): '.$model['date_gener'].' г.
-                        Дата завершения ознакомления: '.$model['date_gener'].' г.
-                        Отчет сгенерировал: '.$model['full_name']);
 
-            //Наименование столбцов
-            $aSheet->setCellValue('A2', 'ФИО');
-            $aSheet->setCellValue('B2', 'Ознакомился');
-            $aSheet->setCellValue('C2', 'Цифровой идентификатор ознакомления');
-            $aSheet->setCellValue('D2', 'Дата ознакомления');
+                        Отчет ознакомления с документом «' . $model['themes'] . '».
+                        Дата размещения документа в системе (https://docs.samgups.ru): ' . $date . ' г.
+                        Дата завершения ознакомления: ' . $date . ' г.
+                        Отчет сгенерировал: ' . $model['full_name']);
+
+        //Наименование столбцов
+        $aSheet->setCellValue('A2', 'ФИО');
+        $aSheet->setCellValue('B2', 'Ознакомился');
+        $aSheet->setCellValue('C2', 'Цифровой идентификатор ознакомления');
+        $aSheet->setCellValue('D2', 'Дата ознакомления');
 
 
-            $item_fileuser = FileUser::find()->where(['id_file' => $id_file])->all();
-            $i = 2;
-            foreach ($item_fileuser as $item) {
-                $aSheet->setCellValue('A' . ($i + 1), $item['full_name']);
-                if ($item['confirm'] == '1') {
-                    $aSheet->setCellValue('B' . ($i + 1), 'Да');
-                } else {
-                    $aSheet->setCellValue('B' . ($i + 1), 'Нет');
-                }
-                $aSheet->setCellValue('C' . ($i + 1), $item['signature']);
-                if (!empty($item['signature'])) {
-                    $aSheet->setCellValue('D' . ($i + 1), $item['date_confirm']);
-                }
-                $i++;
+        $item_fileuser = FileUser::find()->where(['id_file' => $id_file])->all();
+        $i = 2;
+        foreach ($item_fileuser as $item) {
+            $aSheet->setCellValue('A' . ($i + 1), $item['full_name']);
+            if ($item['confirm'] == '1') {
+                $aSheet->setCellValue('B' . ($i + 1), 'Да');
+            } else {
+                $aSheet->setCellValue('B' . ($i + 1), 'Нет');
             }
-
-            $objWriter = new PHPExcel_Writer_Excel2007($xls);
-            $objWriter->save($full_path);
-
-            Yii::$app->session->setFlash('success_report', "Отчет сформирован");
-
-            return [$model, $structure_path];
-
+            $aSheet->setCellValue('C' . ($i + 1), $item['signature']);
+            if (!empty($item['signature'])) {
+                $aSheet->setCellValue('D' . ($i + 1), $item['date_confirm']);
+            }
+            $i++;
         }
-        return $find;
+
+        $objWriter = new PHPExcel_Writer_Excel2007($xls);
+        $objWriter->save($full_path);
+        Yii::$app->response->sendFile($full_path);
+        unlink($full_path);
+//        Yii::$app->session->setFlash('success', 'Отчет сформирован');
+//        return Yii::$app->session->setFlash('success', 'Отчет сформирован');
     }
 
 }
