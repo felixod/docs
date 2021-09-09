@@ -20,6 +20,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 class SendfileController extends Controller
@@ -88,11 +89,9 @@ class SendfileController extends Controller
     public function actionSendu()
     {
         $model = new SendFileForm();
-        /*
-         * Если пришли post-данные, загружаем их в модель
-         */
-        if ($model->load(Yii::$app->request->post())) {
 
+
+        if ($model->load(Yii::$app->request->post())) {
             $model->file = UploadedFile::getInstance($model, 'file');
             Yii::$app->session->setFlash(
                 'sendu-success',
@@ -170,6 +169,9 @@ class SendfileController extends Controller
         /*
         * Если пришли post-данные, загружаем их в модель
         */
+        if(\Yii::$app->request->isAjax){
+            return 'Запрос принят!';
+        }
         if ($model->load(Yii::$app->request->post())) {
             // Проверяем эти данные
             if (!$model->validate()) {

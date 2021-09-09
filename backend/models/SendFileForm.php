@@ -19,6 +19,7 @@ class SendFileForm extends Model
     public $body;
     public $body_email;
     public $dropList;
+    public $file_list_user;
     public $file;
 
 
@@ -27,6 +28,7 @@ class SendFileForm extends Model
         return [
             'name' => 'Ваша тема',
             'email' => 'E-mail',
+            'file_list_user' => 'Лист пользователей',
             'body_email' => 'Текст письма',
             'body' => 'Информация об документе',
             'dropList' => 'Вид документа',
