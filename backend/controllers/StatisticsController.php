@@ -104,6 +104,7 @@ class StatisticsController extends Controller
      */
     public function actionReportexcel($id_file)
     {
+//        var_dump(\Yii::$app->runtimePath);
         GenerReports::generateReportExcel($id_file);
     }
 

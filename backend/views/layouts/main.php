@@ -59,7 +59,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/back
                         ['label' => 'Основное', 'items' => [
                             ['label' => 'Регистрация', 'url' => ['/site/signup']],
                             ['label' => 'Новый документ', 'url' => ['/sendfile/sendu']],
-                            ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
+//                            ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
                         ]],
                         ['label' => 'Справочники', 'items' => [
                             ['label' => 'Организационная структура', 'url' => ['orgstruktura/index']],
@@ -88,7 +88,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/back
 
                         ['label' => 'Основное', 'items' => [
                             ['label' => 'Новый документ', 'url' => ['/sendfile/sendu']],
-                            ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
+//                            ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
                         ]],
                         ['label' => 'Стастистика', 'items' => [
                             ['label' => 'Общая статистика', 'url' => ['/statistics/general']],],],

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\FileType;
 use backend\models\FileTypeSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +21,29 @@ class FiletypeController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout', 'index',],
+                'rules' => [
+                    [
+                        'actions' => ['logout', 'index',],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            [
+                'class' => AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'actions' => ['index',],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
