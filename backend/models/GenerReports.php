@@ -143,8 +143,9 @@ class GenerReports extends \yii\db\ActiveRecord
      */
     public static function generateReportExcel($id_file)
     {
+//        var_dump($_SERVER['DOCUMENT_ROOT'].'/tmp/');
         $id_user = Yii::$app->user->id;
-        $structure = '../../temp/';
+        $structure = $_SERVER['DOCUMENT_ROOT'].'/tmp/';
         $date = date('Y-m-d');
 
         $report_name = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
