@@ -143,14 +143,14 @@ class GenerReports extends \yii\db\ActiveRecord
      */
     public static function generateReportExcel($id_file)
     {
-//        var_dump($_SERVER['DOCUMENT_ROOT'].'/tmp/');
-        $id_user = Yii::$app->user->id;
-        $structure = $_SERVER['DOCUMENT_ROOT'].'/tmp/';
+        $structure = sys_get_temp_dir().'/';
         $date = date('Y-m-d');
-
         $report_name = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
         $full_path = $structure . $report_name;
-
+/*
+        $tmpHandle = tmpfile();
+        $metaDatas = stream_get_meta_data($tmpHandle);
+        $tmpFilename = $metaDatas['uri'];*/
 
         $model = Yii::$app->db->createCommand('
                     SELECT
@@ -167,7 +167,9 @@ class GenerReports extends \yii\db\ActiveRecord
                         file.id_user = user.id')->queryOne();
 
 
+
         $xls = PHPExcel_IOFactory::load('../web/reportPHPExcel/template_xlsx.xlsx');
+
         $aSheet = $xls->getActiveSheet();
 
         //Ширина столбцов
@@ -212,6 +214,7 @@ class GenerReports extends \yii\db\ActiveRecord
         $objWriter->save($full_path);
         Yii::$app->response->sendFile($full_path);
         unlink($full_path);
+//        unlink($full_path);
 //        Yii::$app->session->setFlash('success', 'Отчет сформирован');
 //        return Yii::$app->session->setFlash('success', 'Отчет сформирован');
     }
