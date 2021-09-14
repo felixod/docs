@@ -92,58 +92,30 @@ class SendfileController extends Controller
 
 
         if ($model->load(Yii::$app->request->post())) {
+
+
             $model->file = UploadedFile::getInstance($model, 'file');
+            $model->file->name = uniqid() . '.' .$model->file->extension;
+
             Yii::$app->session->setFlash(
                 'sendu-success',
                 true
             );
-            // Проверяем эти данные
+
             if (!$model->validate()) {
-                /*
-                 * Данные не прошли валидацию
-                 */
+
                 Yii::$app->session->setFlash(
                     'sendu-success',
                     false
                 );
-                // сохраняем в сессии введенные пользователем данные
-                Yii::$app->session->setFlash(
-                    'sendu-data',
-                    [
-                        'name' => $model->name,
-                        'email' => $model->email,
-                        'body_email' => $model->body_email,
-                        'file' => $model->file,
-                        'dropList' => $model->dropList,
-                        'body' => $model->body,
 
-                    ]
-                );
-                /*
-                 * Сохраняем в сессии массив сообщений об ошибках. Массив имеет вид
-                 * [
-                 *     'name' => [
-                 *         'Поле «Ваше имя» обязательно для заполнения',
-                 *     ],
-                 *     'email' => [
-                 *         'Поле «Ваш email» обязательно для заполнения',
-                 *         'Поле «Ваш email» должно быть адресом почты'
-                 *     ]
-                 * ]
-                 */
                 Yii::$app->session->setFlash(
                     'sendu-errors',
                     $model->getErrors()
                 );
 
             } else {
-                /*
-                 * Данные прошли валидацию
-                 */
-
-
                 SendFileForm::SendFile($model);
-
 
                 return $this->refresh();
             }
@@ -169,7 +141,7 @@ class SendfileController extends Controller
         /*
         * Если пришли post-данные, загружаем их в модель
         */
-        if(\Yii::$app->request->isAjax){
+        if (\Yii::$app->request->isAjax) {
             return 'Запрос принят!';
         }
         if ($model->load(Yii::$app->request->post())) {

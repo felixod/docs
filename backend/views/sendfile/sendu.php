@@ -12,7 +12,6 @@ $this->title = 'Рассылка';
 
 Yii::$app->params['bsVersion'] = '4.x';
 
-
 ?>
 <div class="container">
     <p></p>
