@@ -12,17 +12,6 @@ $this->title = 'Рассылка';
 //Определяем версию  загрузки версии
 Yii::$app->params['bsVersion'] = '4.x';
 
-///*
-// * Если данные формы не прошли валидацию, получаем из сессии сохраненные
-// * данные, чтобы заполнить ими поля формы, не заставляя пользователя
-// * заполнять форму повторно
-// */
-//if (Yii::$app->session->hasFlash('sendu-data')) {
-//    $data = Yii::$app->session->getFlash('sendu-data');
-//    $name = Html::encode($data['name']);
-//    $email = Html::encode($data['email']);
-//    $body = Html::encode($data['body']);
-//}
 ?>
 <div class="container">
     <p></p>

@@ -98,9 +98,10 @@ class SendFileForm extends Model
                     mkdir($structure, 0750, true);
                 }
 
-                $pathf = strip_tags($structure . '/' . $model->file);
+                $full_path_file = strip_tags($structure . '/' . $model->file);
+                $pathf = strip_tags('/uploads/' . Yii::$app->user->identity->orgstruktur . '/' . $model->file);
                 $typef = strip_tags($model->file->type);
-                $model->file->saveAs($pathf);
+                $model->file->saveAs($full_path_file);
             }
         }
 

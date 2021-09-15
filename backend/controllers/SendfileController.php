@@ -147,14 +147,12 @@ class SendfileController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             // Проверяем эти данные
             if (!$model->validate()) {
-                /*
-                 * Данные не прошли валидацию
-                 */
+
                 Yii::$app->session->setFlash(
                     'sendu-success',
                     false
                 );
-                // сохраняем в сессии введенные пользователем данные
+
                 Yii::$app->session->setFlash(
                     'sendu-data',
                     [
@@ -162,18 +160,6 @@ class SendfileController extends Controller
                         'body' => $model->body
                     ]
                 );
-                /*
-                 * Сохраняем в сессии массив сообщений об ошибках. Массив имеет вид
-                 * [
-                 *     'name' => [
-                 *         'Поле «Ваше имя» обязательно для заполнения',
-                 *     ],
-                 *     'email' => [
-                 *         'Поле «Ваш email» обязательно для заполнения',
-                 *         'Поле «Ваш email» должно быть адресом почты'
-                 *     ]
-                 * ]
-                 */
                 Yii::$app->session->setFlash(
                     'sendu-errors',
                     $model->getErrors()

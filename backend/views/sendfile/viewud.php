@@ -12,6 +12,9 @@ $this->title = 'Страница ознакомления';
 
 ?>
 <p></p>
+<?php if($id_file_user == null){
+    echo Yii::$app->getSession()->addFlash('error', 'Ошибка доступа к файлам');;
+}else{?>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 <?php if ($id_file_user['confirm'] == 0) { ?>
     <div class="container-fluid">
@@ -50,3 +53,4 @@ $this->title = 'Страница ознакомления';
 
 
 <?php ActiveForm::end(); ?>
+<?php }?>
