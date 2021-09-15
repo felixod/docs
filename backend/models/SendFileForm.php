@@ -93,12 +93,15 @@ class SendFileForm extends Model
             if ($model->file && $model->validate()) {
                 $namefile = strip_tags($model->file->baseName);
                 $structure = Yii::getAlias('@webroot') . '/uploads/' . Yii::$app->user->identity->orgstruktur . '/';
+
                 if (!is_dir($structure)) {
-                    mkdir($structure, 0777, true);
+                    mkdir($structure, 0750, true);
                 }
-                $pathf = strip_tags('/uploads/' . Yii::$app->user->identity->orgstruktur . '/' . $model->file->baseName . '.' . $model->file->extension);
+
+                $full_path_file = strip_tags($structure . '/' . $model->file);
+                $pathf = strip_tags('/uploads/' . Yii::$app->user->identity->orgstruktur . '/' . $model->file);
                 $typef = strip_tags($model->file->type);
-                $model->file->saveAs($structure . $model->file->baseName . '.' . $model->file->extension);
+                $model->file->saveAs($full_path_file);
             }
         }
 

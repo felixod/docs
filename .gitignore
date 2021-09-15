@@ -2,3 +2,4 @@
 vendor/kartik-v/yii2-widget-select2/
 vendor/walkboy/yii2-ajax-progress-bar/
 /tmp/
+/backend/web/uploads/
