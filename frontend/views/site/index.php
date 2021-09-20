@@ -4,9 +4,6 @@
 
 use yii\helpers\Url;
 
-var_dump($gr);
-
-var_dump();
 $this->title = 'Информационная страница';
 ?>
 <div class="container">
