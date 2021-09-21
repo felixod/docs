@@ -92,6 +92,7 @@ class SendFileForm extends Model
 
             if ($model->file && $model->validate()) {
                 $namefile = strip_tags($model->file->baseName);
+                $model->file->name = uniqid() . '.' .$model->file->extension;
                 $structure = Yii::getAlias('@webroot') . '/uploads/' . Yii::$app->user->identity->orgstruktur . '/' . Yii::$app->user->identity->id . '/';
 
                 if (!is_dir($structure)) {

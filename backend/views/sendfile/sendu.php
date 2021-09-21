@@ -25,7 +25,7 @@ Yii::$app->params['bsVersion'] = '4.x';
 
     <?= $form->field($model, 'name')->textInput(['placeholder' => 'Приказ № 0000 от 00.00.0000', 'id' => 'name']); ?>
     <?= $form->field($model, 'email')->textinput(['placeholder' => 'Иванов Иван Иванович - test@sgups.ru; Сергеев Иван Сергеевич - test2@test.ru; ', 'id' => 'email']); ?>
-<!--    --><?//= $form->field($model, 'file_list_user')->fileInput(['class' => '', 'id' => 'file_list_user']) ?>
+    <!--    --><? //= $form->field($model, 'file_list_user')->fileInput(['class' => '', 'id' => 'file_list_user']) ?>
     <?= $form->field($model, 'body_email')->textarea(['rows' => 5, 'placeholder' => 'Ознакомиться с документом до 00.00.0000', 'id' => 'body_email']); ?>
     <?= $form->field($model, 'body')->textarea(['rows' => 5, 'placeholder' => 'В документе содержится информация об ....', 'id' => 'body']); ?>
     <?= $form->field($model, 'dropList')->widget(Select2::classname(), [
@@ -53,48 +53,11 @@ Yii::$app->params['bsVersion'] = '4.x';
 
 
 <?php
-//$js = <<<JS
-////beforeSubmit
-//    $('form').on('beforeSubmit', function(){
-//       var data = $(this).serialize();
-//        $.ajax({
-//            url: './sendu',
-//            type: 'POST',
-//            data: data,
-//            success: function(res){
-//                $('.spinner-grow').show();
-//                console.log(res);
-//            },
-//            error: function(){
-//                alert('Error!');
-//            }
-//        });
-//        return false;
-//    });
-//JS;
-//
-//$this->registerJs($js);
-//?>
-<!--<script>-->
-<!---->
-<!---->
-<!--    $(document).ready(function () {-->
-<!--        $(".form-horizontal").on("submit", function (e) {-->
-<!---->
-<!--            var name = $('#name').val();-->
-<!--            var email = $('#email').val();-->
-<!--            var body_email = $('#body_email').val();-->
-<!--            var body = $('#body').val();-->
-<!--            var file = $('#file').val();-->
-<!--            //todo сделать проверка на выбранный селект-->
-<!--            if (name.length != 0 && email.length != 0 && body_email.length != 0 && body.length != 0 && file.length != 0) {-->
-<!---->
-<!--                $('.spinner-grow').show();-->
-<!--            } else {-->
-<!---->
-<!--            }-->
-<!---->
-<!---->
-<!--        })-->
-<!--    })-->
-<!--</script>-->
+$js = <<<JS
+    $('form').on('beforeSubmit', function(){
+        $('.spinner-grow').show();
+    });
+JS;
+
+$this->registerJs($js);
+?>
