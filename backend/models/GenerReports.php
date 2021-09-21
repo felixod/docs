@@ -147,10 +147,6 @@ class GenerReports extends \yii\db\ActiveRecord
         $date = date('Y-m-d');
         $report_name = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
         $full_path = $structure . $report_name;
-/*
-        $tmpHandle = tmpfile();
-        $metaDatas = stream_get_meta_data($tmpHandle);
-        $tmpFilename = $metaDatas['uri'];*/
 
         $model = Yii::$app->db->createCommand('
                     SELECT
@@ -214,9 +210,7 @@ class GenerReports extends \yii\db\ActiveRecord
         $objWriter->save($full_path);
         Yii::$app->response->sendFile($full_path);
         unlink($full_path);
-//        unlink($full_path);
-//        Yii::$app->session->setFlash('success', 'Отчет сформирован');
-//        return Yii::$app->session->setFlash('success', 'Отчет сформирован');
+
     }
 
 }

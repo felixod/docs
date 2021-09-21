@@ -95,7 +95,7 @@ class SendfileController extends Controller
 
 
             $model->file = UploadedFile::getInstance($model, 'file');
-            $model->file->name = uniqid() . '.' .$model->file->extension;
+
 
             Yii::$app->session->setFlash(
                 'sendu-success',
