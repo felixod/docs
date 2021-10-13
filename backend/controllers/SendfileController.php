@@ -4,23 +4,18 @@
 namespace backend\controllers;
 
 
+use app\models\TagKeywords;
 use backend\models\File;
-use backend\models\FileStatus;
 use backend\models\FileType;
 use backend\models\FileUser;
-use backend\models\OrgStruktura;
 use backend\models\SendFileForm;
 use backend\models\ConfirmForm;
-use backend\models\SendFileOrgForm;
-use DirectoryIterator;
+use backend\models\TagkeyForm;
 use Yii;
-use yii\bootstrap4\Progress;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
 use yii\web\Controller;
-use yii\web\Response;
 use yii\web\UploadedFile;
 
 class SendfileController extends Controller
@@ -121,67 +116,33 @@ class SendfileController extends Controller
             }
         }
         $access_control = FileType::find()->all();
+        $find_tag = TagKeywords::find()->all();
         // Выводим все достпуные варианты прав доступа
         $items = ArrayHelper::map($access_control, 'id_type_file', 'name_type_file');
+        $find_tag_items = ArrayHelper::map($find_tag, 'id_tag', 'tagname');
 
         //var_dump($items);
         $params = [
             'prompt' => 'Выберите вид документа'
         ];
-        return $this->render('sendu', ['model' => $model, 'params' => $params, 'items' => $items]);
+        return $this->render('sendu', ['model' => $model, 'tag_name' => $find_tag_items, 'params' => $params, 'items' => $items]);
 
     }
 
     /**
      * @return string
      */
-    public function actionSenduorg()
+    public function actionTagkey()
     {
-        $model = new SendFileOrgForm();
-        /*
-        * Если пришли post-данные, загружаем их в модель
-        */
-        if (\Yii::$app->request->isAjax) {
-            return 'Запрос принят!';
-        }
+        $model = new TagkeyForm();
+
         if ($model->load(Yii::$app->request->post())) {
-            // Проверяем эти данные
-            if (!$model->validate()) {
+            TagKeywords::addTagname($model);
 
-                Yii::$app->session->setFlash(
-                    'sendu-success',
-                    false
-                );
-
-                Yii::$app->session->setFlash(
-                    'sendu-data',
-                    [
-                        'email' => $model->email,
-                        'body' => $model->body
-                    ]
-                );
-                Yii::$app->session->setFlash(
-                    'sendu-errors',
-                    $model->getErrors()
-                );
-            } else {
-                /*
-                 * Данные прошли валидацию
-                 */
-                SendFileOrgForm::SendFileOrg($model);
-                return $this->refresh();
-            }
+//            return $this->redirect('sendu');
         }
-        $access_control = File::getFileOrg();
-        // Выводим все достпуные варианты прав доступа
-        $items = ArrayHelper::map($access_control, 'id_file', 'name_file', 'name_struktura');
 
-        //var_dump($items);
-        $params = [
-            'prompt' => 'Выберите документ'
-        ];
-        return $this->render('senduorg', ['model' => $model, 'params' => $params, 'items' => $items]);
-
-
+        return $this->renderAjax('tagkey', ['model' => $model]);
     }
+
 }
