@@ -21,7 +21,8 @@
         "phpoffice/phpword": "^0.18.2",
         "walkboy/yii2-ajax-progress-bar": "dev-master",
         "kartik-v/yii2-widget-select2": "@dev",
-        "phpoffice/phpexcel": "^1.8"
+        "phpoffice/phpexcel": "^1.8",
+        "kartik-v/yii2-widget-fileinput": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -84,50 +84,69 @@ class SendfileController extends Controller
     public function actionSendu()
     {
         $model = new SendFileForm();
+        $data = [];
 
+
+        //todo добавить парсинг файла
+
+//        if(\Yii::$app->request->isAjax){
+//            var_dump($model);
+//            $model->file = UploadedFile::getInstance($model, 'file_user');
+//
+//            var_dump($model->file);
+//            $fh = fopen('C:/Users/tonyl/Desktop/123.csv', "r");
+//            fgetcsv($fh, 0, ',');
+//
+//
+//            while (($row = fgetcsv($fh, 0, ',')) !== false) {
+//                list($name, $email) = $row;
+//
+//                $data[] = [
+//                    'full_list' => $name.' - '.$email,
+//                ];
+//            }
+//
+//            return 'Запрос принят!';
+//        }
 
         if ($model->load(Yii::$app->request->post())) {
-
-
             $model->file = UploadedFile::getInstance($model, 'file');
-
-
+            $model->file_user = UploadedFile::getInstance($model, 'file_user');
             Yii::$app->session->setFlash(
                 'sendu-success',
                 true
             );
-
             if (!$model->validate()) {
-
                 Yii::$app->session->setFlash(
                     'sendu-success',
                     false
                 );
-
                 Yii::$app->session->setFlash(
                     'sendu-errors',
                     $model->getErrors()
                 );
-
             } else {
                 SendFileForm::SendFile($model);
-
                 return $this->refresh();
             }
         }
+
+
         $access_control = FileType::find()->all();
         $find_tag = TagKeywords::find()->all();
         // Выводим все достпуные варианты прав доступа
         $items = ArrayHelper::map($access_control, 'id_type_file', 'name_type_file');
         $find_tag_items = ArrayHelper::map($find_tag, 'id_tag', 'tagname');
-
-        //var_dump($items);
+        $full_select = ArrayHelper::map($data, 'full_list', 'full_list');
         $params = [
             'prompt' => 'Выберите вид документа'
         ];
-        return $this->render('sendu', ['model' => $model, 'tag_name' => $find_tag_items, 'params' => $params, 'items' => $items]);
+
+
+        return $this->render('sendu', ['model' => $model, 'tag_name' => $find_tag_items, 'params' => $params, 'items' => $items, 'email_list' => $full_select]);
 
     }
+
 
     /**
      * @return string
@@ -138,8 +157,6 @@ class SendfileController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             TagKeywords::addTagname($model);
-
-//            return $this->redirect('sendu');
         }
 
         return $this->renderAjax('tagkey', ['model' => $model]);

@@ -37,7 +37,7 @@ Yii::$app->params['bsVersion'] = '4.x';
 
 <?php
 $js = <<<JS
-    $('form').on('beforeSubmit', function(){
+    $('#tagkeywords').on('beforeSubmit', function(){
         var data = $(this).serialize();
         $.ajax({
             url: 'tagkey',
@@ -48,7 +48,7 @@ $js = <<<JS
                 $('#successinfo').show();
                 setTimeout(function (){
                     document.getElementById('successinfo').style.display = 'none';
-                }, 2000);
+                },2000);
             },
             error: function(){
                 alert('Возникла ошибка, обратитесь в техническую поддержку!');

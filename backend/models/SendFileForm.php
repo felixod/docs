@@ -15,8 +15,9 @@ use yii\validators\EmailValidator;
 class SendFileForm extends Model
 {
     public $name;
-    public $email;
     public $body;
+    public $file_user;
+    public $list_email;
     public $tag_list;
     public $body_email;
     public $dropList;
@@ -27,9 +28,10 @@ class SendFileForm extends Model
     {
         return [
             'name' => 'Ваша тема',
-            'email' => 'E-mail',
             'file_list_user' => 'Лист пользователей',
             'tag_list' => 'Ключевые слова',
+            'file_user' => 'Файл импорта',
+            'list_email' => 'Список пользователей',
             'body_email' => 'Текст письма',
             'body' => 'Информация об документе',
             'dropList' => '',
@@ -40,12 +42,12 @@ class SendFileForm extends Model
     public function rules()
     {
         return [
-            // удалить пробелы для всех трех полей формы
-            [['name', 'email', 'body'], 'trim'],
+            // удалить пробелы для всех  формы
+            [['name', 'body_email','body'], 'trim'],
             // поле name обязательно для заполнения
             ['name', 'required', 'message' => 'Поле «Ваше имя» обязательно для заполнения'],
-            // поле email обязательно для заполнения
-            ['email', 'required', 'message' => 'Поле «Ваш email» обязательно для заполнения'],
+            // поле list_user обязательно для заполнения
+            ['list_email', 'required', 'message' => 'Поле «Адреса почт» обязательно для заполнения'],
             // поле body_email обязательно для заполнения
             ['body_email', 'required', 'message' => 'Поле «Текст письма» обязательно для заполнения'],
             // поле body обязательно для заполнения
@@ -62,11 +64,6 @@ class SendFileForm extends Model
                 'string',
                 'max' => 50,
                 'tooLong' => 'Поле должно быть длиной не более 50 символов'
-            ],
-            // поле email должны быть не более 50 символов
-            [
-                ['email'],
-                'string',
             ],
             // поле body должно быть не более 1000 символов
             [
@@ -103,8 +100,11 @@ class SendFileForm extends Model
             }
         }
 
+        $mas_em = array();
         //Разбиваеи список полученных электронных адресов и помещяю в массив
-        $mas_em = explode(";", strip_tags($model->email));
+        foreach ($model->list_email as $list_email){
+            array_push($mas_em, $list_email);
+        }
 
         //Запрос для первичного добавления файла
         $sql = new File();
