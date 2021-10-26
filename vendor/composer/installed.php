@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '4370d534d8ccba3ed9d5ef0857002e06c1b450a7',
+        'reference' => '33d8e44f766c31c319354ed493278baf8dbcace3',
         'name' => 'yiisoft/yii2-app-advanced',
         'dev' => true,
     ),
@@ -199,6 +199,15 @@
             'reference' => '1dc8d9cba3897165e16d12bb13d813afb1eb3fe7',
             'dev_requirement' => true,
         ),
+        'kartik-v/bootstrap-fileinput' => array(
+            'pretty_version' => 'v5.2.6',
+            'version' => '5.2.6.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../kartik-v/bootstrap-fileinput',
+            'aliases' => array(),
+            'reference' => '642849327db63231922558b580e985e27beddfc1',
+            'dev_requirement' => false,
+        ),
         'kartik-v/yii2-krajee-base' => array(
             'pretty_version' => 'v3.0.1',
             'version' => '3.0.1.0',
@@ -206,6 +215,17 @@
             'install_path' => __DIR__ . '/../kartik-v/yii2-krajee-base',
             'aliases' => array(),
             'reference' => 'bbf7b58b0000f44834c18c0f2eed13a0a7d04c09',
+            'dev_requirement' => false,
+        ),
+        'kartik-v/yii2-widget-fileinput' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../kartik-v/yii2-widget-fileinput',
+            'aliases' => array(
+                0 => '1.1.x-dev',
+            ),
+            'reference' => 'd3caa4911ecd8125a5f87865807fa1de7f6cdba7',
             'dev_requirement' => false,
         ),
         'kartik-v/yii2-widget-select2' => array(
@@ -827,7 +847,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '4370d534d8ccba3ed9d5ef0857002e06c1b450a7',
+            'reference' => '33d8e44f766c31c319354ed493278baf8dbcace3',
             'dev_requirement' => false,
         ),
         'yiisoft/yii2-bootstrap4' => array(

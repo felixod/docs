@@ -43,6 +43,9 @@ class TagKeywords extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @param $model
+     */
     public static function addTagname($model){
 
         $sql = new TagKeywords();

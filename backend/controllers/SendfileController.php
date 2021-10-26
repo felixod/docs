@@ -11,6 +11,7 @@ use backend\models\FileUser;
 use backend\models\SendFileForm;
 use backend\models\ConfirmForm;
 use backend\models\TagkeyForm;
+use backend\models\UploadForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -84,50 +85,51 @@ class SendfileController extends Controller
     public function actionSendu()
     {
         $model = new SendFileForm();
+        $data = [];
+        $session = Yii::$app->session;
 
+        if (!empty($session->get('import_list'))) {
+            $data = $session->get('import_list');
+            $session->destroy();
+        }
 
         if ($model->load(Yii::$app->request->post())) {
-
-
             $model->file = UploadedFile::getInstance($model, 'file');
-
-
             Yii::$app->session->setFlash(
                 'sendu-success',
                 true
             );
-
             if (!$model->validate()) {
-
                 Yii::$app->session->setFlash(
                     'sendu-success',
                     false
                 );
-
                 Yii::$app->session->setFlash(
                     'sendu-errors',
                     $model->getErrors()
                 );
-
             } else {
                 SendFileForm::SendFile($model);
-
                 return $this->refresh();
             }
         }
+
+
         $access_control = FileType::find()->all();
         $find_tag = TagKeywords::find()->all();
         // Выводим все достпуные варианты прав доступа
         $items = ArrayHelper::map($access_control, 'id_type_file', 'name_type_file');
         $find_tag_items = ArrayHelper::map($find_tag, 'id_tag', 'tagname');
-
-        //var_dump($items);
+        $full_select = ArrayHelper::map($data, 'full_list', 'full_list');
         $params = [
             'prompt' => 'Выберите вид документа'
         ];
-        return $this->render('sendu', ['model' => $model, 'tag_name' => $find_tag_items, 'params' => $params, 'items' => $items]);
+
+
+        return $this->render('sendu', ['model' => $model, 'tag_name' => $find_tag_items, 'items' => $items, 'email_list' => $full_select, 'data' => $data]);
 
     }
+
 
     /**
      * @return string
@@ -138,11 +140,25 @@ class SendfileController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             TagKeywords::addTagname($model);
-
-//            return $this->redirect('sendu');
         }
 
         return $this->renderAjax('tagkey', ['model' => $model]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionImportlist()
+    {
+        $model = new UploadForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->file_user = UploadedFile::getInstance($model, 'file_user');
+            UploadForm::impotrSave($model);
+            return $this->redirect('sendu');
+        }
+
+        return $this->renderAjax('importlist', ['model' => $model]);
     }
 
 }
