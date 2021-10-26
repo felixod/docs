@@ -11,6 +11,7 @@ use backend\models\FileUser;
 use backend\models\SendFileForm;
 use backend\models\ConfirmForm;
 use backend\models\TagkeyForm;
+use backend\models\UploadForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -85,33 +86,15 @@ class SendfileController extends Controller
     {
         $model = new SendFileForm();
         $data = [];
+        $session = Yii::$app->session;
 
-
-        //todo добавить парсинг файла
-
-//        if(\Yii::$app->request->isAjax){
-//            var_dump($model);
-//            $model->file = UploadedFile::getInstance($model, 'file_user');
-//
-//            var_dump($model->file);
-//            $fh = fopen('C:/Users/tonyl/Desktop/123.csv', "r");
-//            fgetcsv($fh, 0, ',');
-//
-//
-//            while (($row = fgetcsv($fh, 0, ',')) !== false) {
-//                list($name, $email) = $row;
-//
-//                $data[] = [
-//                    'full_list' => $name.' - '.$email,
-//                ];
-//            }
-//
-//            return 'Запрос принят!';
-//        }
+        if (!empty($session->get('import_list'))) {
+            $data = $session->get('import_list');
+            $session->destroy();
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             $model->file = UploadedFile::getInstance($model, 'file');
-            $model->file_user = UploadedFile::getInstance($model, 'file_user');
             Yii::$app->session->setFlash(
                 'sendu-success',
                 true
@@ -143,7 +126,7 @@ class SendfileController extends Controller
         ];
 
 
-        return $this->render('sendu', ['model' => $model, 'tag_name' => $find_tag_items, 'params' => $params, 'items' => $items, 'email_list' => $full_select]);
+        return $this->render('sendu', ['model' => $model, 'tag_name' => $find_tag_items, 'items' => $items, 'email_list' => $full_select, 'data' => $data]);
 
     }
 
@@ -160,6 +143,22 @@ class SendfileController extends Controller
         }
 
         return $this->renderAjax('tagkey', ['model' => $model]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionImportlist()
+    {
+        $model = new UploadForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->file_user = UploadedFile::getInstance($model, 'file_user');
+            UploadForm::impotrSave($model);
+            return $this->redirect('sendu');
+        }
+
+        return $this->renderAjax('importlist', ['model' => $model]);
     }
 
 }

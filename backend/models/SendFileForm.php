@@ -16,7 +16,6 @@ class SendFileForm extends Model
 {
     public $name;
     public $body;
-    public $file_user;
     public $list_email;
     public $tag_list;
     public $body_email;
@@ -30,7 +29,6 @@ class SendFileForm extends Model
             'name' => 'Ваша тема',
             'file_list_user' => 'Лист пользователей',
             'tag_list' => 'Ключевые слова',
-            'file_user' => 'Файл импорта',
             'list_email' => 'Список пользователей',
             'body_email' => 'Текст письма',
             'body' => 'Информация об документе',

@@ -6,15 +6,11 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Modal;
 use yii\widgets\Pjax;
 
-
 $this->title = 'Рассылка';
 Yii::$app->params['bsVersion'] = '4.x';
 ?>
 <div class="container">
-    <p></p>
     <h1><?= Html::encode($this->title) ?></h1>
-    <p></p>
-    <!--    --><? //= Html::submitButton('Добавить тег для документа', ['value' => \yii\helpers\Url::to('tagkey'), 'class' => 'btn btn-success', 'id' => 'modalButton'])?>
     <?php
     Modal::begin([
         'title' => 'Справочник тегов документов',
@@ -25,33 +21,58 @@ Yii::$app->params['bsVersion'] = '4.x';
     Modal::end();
     ?>
     <?php
+    Modal::begin([
+        'title' => 'Импорт пользователей',
+        'id' => 'import_user',
+        'size' => 'modal-lg',
+    ]);
+    echo "<div id='modalContentImport'></div>";
+    Modal::end();
+    ?>
+    <?php
     $addon = [
+        'prepend' => [
+            'content' => '<i class="fas fa-globe"></i>'
+        ],
         'append' => [
             'content' => Html::submitButton('Добавить тег для документа', ['value' => \yii\helpers\Url::to('tagkey'), 'class' => 'btn btn-success', 'id' => 'modalButton']),
             'asButton' => true
         ]
-    ]; ?>
+    ];
+    $addon_import = [
+        'prepend' => [
+            'content' => '<i class="fas fa-globe"></i>'
+        ],
+        'append' => [
+            'content' => Html::submitButton('Файл импорта', ['value' => \yii\helpers\Url::to('importlist'), 'class' => 'btn btn-success', 'id' => 'modalButtonImport']),
+            'asButton' => true
+        ]
+    ] ?>
     <?php $form = ActiveForm::begin(['options' => [
         'id' => 'feedback',
         'enctype' => 'multipart/form-data',
-        'class' => 'form-horizontal']]); ?>
+        'class' => 'form-horizontal',
+    ]]); ?>
     <?= $form->field($model, 'name')->textInput(['id' => 'name']); ?>
+    <?php Pjax::begin([
+        'id' => 'pjaxContentImport',
+    ]); ?>
     <?= $form->field($model, 'list_email')->widget(Select2::className(), [
         'data' => $email_list,
         'id' => 'list_email',
+        'size' => Select2::MEDIUM,
+        'options' => ['placeholder' => 'Иванов Иван Иванович - test@samgups.ru'],
         'class' => 'form-control',
         'pluginOptions' => [
             'allowClear' => true,
             'tags' => true,
             'multiple' => true,
         ],
+        'addon' => $addon_import
     ]) ?>
-    <?= $form->field($model, 'file_user')->fileinput(['id' => 'file_user']); ?>
-    <?php //todo убрать обновление страницы, с добавление именно select, а также вывод ошибок?>
-    <element id="after_cart_widget">
+    <?php Pjax::end(); ?>
     <?php Pjax::begin([
         'id' => 'pjaxContent',
-
     ]); ?>
     <?= $form->field($model, 'tag_list')->widget(Select2::className(), [
         'data' => $tag_name,
@@ -64,7 +85,6 @@ Yii::$app->params['bsVersion'] = '4.x';
         'addon' => $addon,
     ]) ?>
     <?php Pjax::end(); ?>
-    </element>
     <?= $form->field($model, 'body_email')->textarea(['rows' => 5, 'id' => 'body_email']); ?>
     <?= $form->field($model, 'body')->textarea(['rows' => 5, 'placeholder' => 'В документе содержится информация об ....', 'id' => 'body']); ?>
     <?= $form->field($model, 'dropList')->widget(Select2::classname(), [
@@ -88,13 +108,16 @@ Yii::$app->params['bsVersion'] = '4.x';
 
 </div>
 
-
 <?php
 $js = <<<JS
 $(document).ready(function(){
       $("#modal_tag").on('hide.bs.modal', function () {
-        // location.reload();
         $.pjax.reload({container: '#pjaxContent', async:false});
+    });
+});
+$(document).ready(function(){
+      $("#import_user").on('hide.bs.modal', function () {
+        $.pjax.reload({container: '#pjaxContentImport', async:false});
     });
 });
     $('form').on('beforeSubmit', function(){
