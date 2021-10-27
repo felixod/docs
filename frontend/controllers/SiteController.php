@@ -3,6 +3,8 @@ namespace frontend\controllers;
 
 use app\models\File;
 use app\models\FileType;
+use app\models\TagFileKeyword;
+use app\models\TagKeywords;
 use backend\models\SignupForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
@@ -93,11 +95,12 @@ class SiteController extends Controller
             }
         }
 
+        $tag_key = TagKeywords::getListFileTag();
         $data_2 = $filemodel->search_2($institut);
         // Выводим все достпуные варианты прав доступа
         $items = ArrayHelper::map($data, 'id_type_file', 'name_type_file');
 
-        return $this->render('index', ['data' => $items, 'gr' => $data_2 ]);
+        return $this->render('index', ['tag' => $tag_key,'gr' => $data_2 ]);
     }
 
     /**

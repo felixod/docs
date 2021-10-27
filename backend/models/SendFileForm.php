@@ -60,7 +60,7 @@ class SendFileForm extends Model
             [
                 ['name'],
                 'string',
-                'max' => 50,
+                'max' => 1000,
                 'tooLong' => 'Поле должно быть длиной не более 50 символов'
             ],
             // поле body должно быть не более 1000 символов

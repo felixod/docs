@@ -2,8 +2,6 @@
 
 /* @var $this yii\web\View */
 
-use yii\helpers\Url;
-
 $this->title = 'Информационная страница';
 
 ?>
@@ -31,15 +29,22 @@ $this->title = 'Информационная страница';
                                 <div class="card-body">
                                     <h5 class="card-title">Статус: <?= $item[$i]['status'] ?></h5>
                                     <p class="card-text"><?= $item[$i]['other_info'] ?></p>
+                                    <?php foreach($tag as $i_tag){
+                                        if($i_tag['tag_file_id'] == $item[$i]['id_file']){
+                                            ?><span class='badge badge-dark'><?=$i_tag['tagname']?></span><?php
+                                        }
+                                    }?>
+                                    <br>
                                     <a target="_blank"
                                        href="<?= Yii::$app->urlManagerBackend->createUrl([$item[$i]['path']]) ?>"
-                                       class="btn btn-primary">Посмотреть</a>
+                                       class="btn btn-primary">Документ</a>
                                 </div>
                                 <div class="card-footer text-muted">
                                     <?= $item[$i]['date_file'] ?>
                                 </div>
                             </div>
                         </div>
+                            <br>
                         <?php } ?>
                     <?php } ?>
                 <?php } ?>
