@@ -53,7 +53,6 @@ Yii::$app->params['bsVersion'] = '4.x';
         'enctype' => 'multipart/form-data',
         'class' => 'form-horizontal',
     ]]); ?>
-    <?= $form->field($model, 'name')->textInput(['id' => 'name']); ?>
     <?php Pjax::begin([
         'id' => 'pjaxContentImport',
     ]); ?>
@@ -85,6 +84,7 @@ Yii::$app->params['bsVersion'] = '4.x';
         'addon' => $addon,
     ]) ?>
     <?php Pjax::end(); ?>
+    <?= $form->field($model, 'name')->textInput(['id' => 'name']); ?>
     <?= $form->field($model, 'body_email')->textarea(['rows' => 5, 'id' => 'body_email']); ?>
     <?= $form->field($model, 'body')->textarea(['rows' => 5, 'placeholder' => 'В документе содержится информация об ....', 'id' => 'body']); ?>
     <?= $form->field($model, 'dropList')->widget(Select2::classname(), [
