@@ -24,30 +24,3 @@ Yii::$app->params['bsVersion'] = '4.x';
         <?php ActiveForm::end(); ?>
 
     </div>
-
-<?php
-//$js = <<<JS
-//    $('#importForm').on('beforeSubmit', function(){
-//        var data = $(this).serialize();
-//        $.ajax({
-//            url: 'importlist',
-//            type: 'POST',
-//            data: data,
-//            success: function(res){
-//                console.log(res)
-//                document.getElementById('importForm').reset();
-//                $('#successinfo').show();
-//                setTimeout(function (){
-//                    document.getElementById('successinfo').style.display = 'none';
-//                },2000);
-//            },
-//            error: function(){
-//                alert('Возникла ошибка, обратитесь в техническую поддержку!');
-//            }
-//        });
-//        return false;
-//    });
-//JS;
-//$this->registerJs($js);
-//
-//?>

@@ -12,24 +12,6 @@ Yii::$app->params['bsVersion'] = '4.x';
 <div class="container">
     <h1><?= Html::encode($this->title) ?></h1>
     <?php
-    Modal::begin([
-        'title' => 'Справочник тегов документов',
-        'id' => 'modal_tag',
-        'size' => 'modal-lg',
-    ]);
-    echo "<div id='modalContent'></div>";
-    Modal::end();
-    ?>
-    <?php
-    Modal::begin([
-        'title' => 'Импорт пользователей',
-        'id' => 'import_user',
-        'size' => 'modal-lg',
-    ]);
-    echo "<div id='modalContentImport'></div>";
-    Modal::end();
-    ?>
-    <?php
     $addon = [
         'prepend' => [
             'content' => '<i class="fas fa-globe"></i>'
@@ -48,6 +30,24 @@ Yii::$app->params['bsVersion'] = '4.x';
             'asButton' => true
         ]
     ] ?>
+    <?php
+    Modal::begin([
+        'title' => 'Справочник тегов документов',
+        'id' => 'modal_tag',
+        'size' => 'modal-lg',
+    ]);
+    echo "<div id='modalContent'></div>";
+    Modal::end();
+    ?>
+    <?php
+    Modal::begin([
+        'title' => 'Импорт пользователей',
+        'id' => 'import_user',
+        'size' => 'modal-lg',
+    ]);
+    echo "<div id='modalContentImport'></div>";
+    Modal::end();
+    ?>
     <?php $form = ActiveForm::begin(['options' => [
         'id' => 'feedback',
         'enctype' => 'multipart/form-data',

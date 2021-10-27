@@ -140,7 +140,6 @@ class File extends \yii\db\ActiveRecord
 
         foreach ($institut as $item) {
 
-
 //            $query = FileUser::find()->where('id_file=' . $item['id_file']);
             $query = \Yii::$app->db->createCommand('SELECT 
                                                             file.id_file,

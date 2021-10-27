@@ -5,55 +5,45 @@
 use yii\helpers\Url;
 
 $this->title = 'Информационная страница';
+
 ?>
 <div class="container">
-    <?php foreach ($gr as $item) { ?>
-        <?php if ($item[0]['name_type_file'] != NULL) { ?>
-            <div class="accordion" id="accordionExample">
-                <div class="card">
-                    <div class="card-header" id="<?= $item[0]['id_type_file'] ?>">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse"
-                                    data-target="#<?= $item[0]['name_type_file'] ?>" aria-expanded="true"
-                                    aria-controls="collapseOne">
-                                <?= $item[0]['name_type_file'] ?>
-                            </button>
-                        </h5>
-                    </div>
-
-                    <div id="<?= $item[0]['name_type_file'] ?>" class="collapse show" aria-labelledby="headingOne"
-                         data-parent="#<?= $item[0]['name_type_file'] ?>">
-                        <div class="card-body">
-                            <h3></h3>
-                            <table class="table">
-                                <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Номер документа</th>
-                                    <th scope="col">Наименование</th>
-                                    <th scope="col">Ссылка</th>
-                                    <th scope="col">Статус документа</th>
-                                    <th scope="col">Дата публикации</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php for ($i = 0; $i < count($item); $i++) {
-                                    ?>
-                                    <tr>
-                                        <th scope="row"><?= $item[$i]['id_file'] ?></th>
-                                        <td><?= $item[$i]['themes'] ?></td>
-                                        <td>
-                                            <a target="_blank" href="<?= Yii::$app->urlManagerBackend->createUrl([$item[$i]['path']]) ?>">Ссылка</a>
-                                        </td>
-                                        <td><?= $item[$i]['status'] ?></td>
-                                        <td><?= $item[$i]['date_file'] ?></td>
-                                    </tr>
-                                <?php } ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="list-group" id="list-tab" role="tablist">
+                <?php foreach ($gr as $item) { ?>
+                <a class="list-group-item list-group-item-action" id="<?= $item[0]['id_type_file']?>" href="?id_bt=<?= $item[0]['name_type_file'] ?>&id_type_file=<?= $item[0]['id_type_file']?>" role="tab" aria-controls="<?= $item[0]['name_type_file'] ?>"><?= $item[0]['name_type_file'] ?></a>
+                <?php }?>
             </div>
-        <?php } ?>
-    <?php } ?>
+        </div>
+
+        <div class="col-8">
+            <div class="tab-content" id="nav-tabContent">
+                <?php foreach ($gr as $item) { ?>
+                <?php for ($i = 0; $i < count($item); $i++) { ?>
+                    <?php if ($_GET['id_type_file'] == $item[$i]['id_type_file']) { ?>
+                        <div class="tab-pane fade show active" id="<?= $_GET['id_bt'] ?>" role="tabpanel"
+                             aria-labelledby="list-home-list">
+                            <div class="card">
+                                <div class="card-header">
+                                    <?= $item[$i]['themes'] ?>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Статус: <?= $item[$i]['status'] ?></h5>
+                                    <p class="card-text"><?= $item[$i]['other_info'] ?></p>
+                                    <a target="_blank"
+                                       href="<?= Yii::$app->urlManagerBackend->createUrl([$item[$i]['path']]) ?>"
+                                       class="btn btn-primary">Посмотреть</a>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <?= $item[$i]['date_file'] ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
+                    <?php } ?>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
 </div>
