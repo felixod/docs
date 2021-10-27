@@ -28,8 +28,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/fron
     <?php $this->beginBody() ?>
 
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<?= Yii::$app->homeUrl ?>"><img
-                        src="/backend/web/img/logow.png"/></a></h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<?= Yii::$app->homeUrl ?>"><img src="/backend/web/img/logow.png"/></a></h5>
         <?php
         try {
             echo Nav::widget([
@@ -37,14 +36,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/fron
                 'encodeLabels' => false,
                 'items' => [
                     ['label' => 'Главная', 'url' => ['/site/index']],
-//                    ['label' => 'Основное', 'url' => ['/site/index'], 'items' => [
-//                        ['label' => 'Главная', 'url' => ['/site/index']],
-//                    ]],
-//                    ['label' => 'Стастистика', 'url' => ['/statistics/lkreport'], 'items' => [
-//                        ['label' => 'Организационная структура', 'url' => ['orgstruktura/index']],
-//                        ['label' => 'Сформированные отчеты', 'url' => ['statistics/lkreport']],
-//                        ['label' => 'Общая стастистика', 'url' => ['/statistics/general']],],],
-
                     Yii::$app->user->isGuest ? (
 
                     ['label' => 'Авторизация', 'url' => ['/site/login']]) :
