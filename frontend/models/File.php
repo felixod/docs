@@ -134,13 +134,11 @@ class File extends \yii\db\ActiveRecord
         return $this->hasMany(GenerReports::className(), ['id_file' => 'id_file']);
     }
 
-    public function search_2($institut)
+    public function search_2($institut, $pages)
     {
         $k = 0;
+       foreach ($institut as $item) {
 
-        foreach ($institut as $item) {
-
-//            $query = FileUser::find()->where('id_file=' . $item['id_file']);
             $query = \Yii::$app->db->createCommand('SELECT 
                                                             file.id_file,
                                                             file.id_user,
@@ -160,11 +158,16 @@ class File extends \yii\db\ActiveRecord
                                                             file_type,
                                                             file_status
                                                         WHERE 
-                                                            file.id_type_file ='.$item['id_type_file'].'
+                                                            file.id_type_file =' . $item['id_type_file'] . '
                                                         AND 
                                                             file.id_type_file = file_type.id_type_file
                                                         AND
-                                                            file_status.id_file = file.id_file');
+                                                            file_status.id_file = file.id_file
+                                                        LIMIT 
+                                                        ' . $pages->limit . '
+                                                        OFFSET 
+                                                        ' . $pages->offset);
+
             $f = $query->queryAll();
 
             foreach ($f as $key) {
@@ -187,17 +190,8 @@ class File extends \yii\db\ActiveRecord
             }
         }
 
-        $grouped = array();
-        $groupBy = 'id_type_file';
-        foreach ($institut as $v) {
-            $key = $v[$groupBy];
-            if (!array_key_exists($key, $grouped))
-                $grouped[$key] = array($v);
-            else
-                $grouped[$key][] = $v;
-        }
 
-        return $grouped;
+        return $institut;
     }
 
 }

@@ -64,6 +64,7 @@ class TagKeywords extends \yii\db\ActiveRecord
                                                          tag_keywords, tag_file_keyword 
                                                     WHERE 
                                                           tag_file_keyword.tag_id = tag_keywords.id_tag");
+
         return $query->queryAll();
     }
 

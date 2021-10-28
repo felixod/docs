@@ -3,14 +3,12 @@ namespace frontend\controllers;
 
 use app\models\File;
 use app\models\FileType;
-use app\models\TagFileKeyword;
 use app\models\TagKeywords;
-use backend\models\SignupForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
-use yii\helpers\ArrayHelper;
+use yii\data\Pagination;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -18,7 +16,6 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use frontend\models\ContactForm;
 
 /**
  * Site controller
@@ -79,15 +76,16 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
         $filemodel= new File();
-        $data = FileType::find()->all();
+        $file_type = FileType::find()->all();
 
         $institut = [];
         $k=0;
 
-        if (!empty($data)) {
+        if (!empty($file_type)) {
 
-            foreach ($data as $key) {
+            foreach ($file_type as $key) {
                 $institut[$k] = [
                     'id_type_file' => $key['id_type_file'],
                 ];
@@ -95,12 +93,18 @@ class SiteController extends Controller
             }
         }
 
-        $tag_key = TagKeywords::getListFileTag();
-        $data_2 = $filemodel->search_2($institut);
-        // Выводим все достпуные варианты прав доступа
-        $items = ArrayHelper::map($data, 'id_type_file', 'name_type_file');
+        $count_file = File::find()->count();
 
-        return $this->render('index', ['tag' => $tag_key,'gr' => $data_2 ]);
+        $tag_key = TagKeywords::getListFileTag();
+
+        if (!empty($_GET['id_type_file'])) {
+            $count_file = File::find()->where(['id_type_file'=>$_GET['id_type_file']])->count();
+        }
+
+        $pages = new Pagination(['totalCount' => $count_file, 'pageSize' => 1]);
+        $data_2 = $filemodel->search_2($institut, $pages);
+
+        return $this->render('index', ['tag' => $tag_key, 'file_type' => $file_type,'gr' => $data_2, 'pages' => $pages]);
     }
 
     /**
