@@ -101,7 +101,7 @@ class SiteController extends Controller
             $count_file = File::find()->where(['id_type_file'=>$_GET['id_type_file']])->count();
         }
 
-        $pages = new Pagination(['totalCount' => $count_file, 'pageSize' => 1]);
+        $pages = new Pagination(['totalCount' => $count_file, 'pageSize' => 10]);
         $data_2 = $filemodel->search_2($institut, $pages);
 
         return $this->render('index', ['tag' => $tag_key, 'file_type' => $file_type,'gr' => $data_2, 'pages' => $pages]);
