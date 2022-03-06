@@ -154,6 +154,7 @@ class GenerReports extends \yii\db\ActiveRecord
                         file.id_user,
                         file.other_info,
                         file.themes,
+                        file.date_file,
                         user.full_name
                     FROM
                         file
@@ -179,9 +180,9 @@ class GenerReports extends \yii\db\ActiveRecord
                         ОТЧЕТ
 
                         Отчет ознакомления с документом «' . $model['themes'] . '».
-                        Дата размещения документа в системе (https://docs.samgups.ru): ' . $date . ' г.
-                        Дата завершения ознакомления: ' . $date . ' г.
+                        Дата размещения документа в системе (https://docs.samgups.ru): ' . $model['date_file'] . ' г.
                         Отчет сгенерировал: ' . $model['full_name']);
+                        // Дата завершения ознакомления: ' . $date . ' г.
 
         //Наименование столбцов
         $aSheet->setCellValue('A2', 'ФИО');
