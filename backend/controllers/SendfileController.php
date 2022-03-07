@@ -67,11 +67,24 @@ class SendfileController extends Controller
 
         //если POST пришёл
         if ($model->load(Yii::$app->request->post())) {
-
+            
+            
             ConfirmForm::confirmDoc($model, $id_file_user);
             return $this->refresh();
         }
 
+        $res_fu_1 = File::findOne($id_file);
+        $res_fu_2 = FileUser::findOne($id_file_user);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            
+            // ConfirmForm::confirmDoc($model, base64_decode($id_file_user));
+            ConfirmForm::confirmDoc($model, $id_file_user);
+            return $this->refresh();
+        }
+
+        // $res_fu_1 = File::findOne(base64_decode($id_file));
+        // $res_fu_2 = FileUser::findOne(base64_decode($id_file_user));
         $res_fu_1 = File::findOne($id_file);
         $res_fu_2 = FileUser::findOne($id_file_user);
 
