@@ -4,6 +4,7 @@ namespace backend\models;
 
 use app\models\GenerReports;
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "file".
@@ -134,39 +135,32 @@ class File extends \yii\db\ActiveRecord
     {
         return $this->hasMany(GenerReports::className(), ['id_file' => 'id_file']);
     }
+    
 
+    //Вывод общей информации, пагинации, а также информация о количествах людей
     public static function getFileInfo($pages, $id_user)
     {
+        
+        $info_sql = new Query();
 
-        $themes = Yii::$app->db->createCommand('SELECT file.id_file, file.themes, file.other_info, COUNT(file_user.confirm) as confirm,
-                                                      sum(CASE WHEN file_user.confirm= "0" THEN 1 ELSE 0 END) as no_ozn,
-                                                      sum(CASE WHEN file_user.confirm = "1" THEN 1 ELSE 0 END) as ozn
-                                                    FROM file_user, file
-                                                    WHERE file_user.id_file=file.id_file AND file.id_user =' . $id_user . '
-                                                    GROUP BY file.id_file
-                                                    LIMIT 
-                                                         ' . $pages->limit . '
-                                                    OFFSET 
-                                                         ' . $pages->offset)->queryAll();
+        $info_sql->select(['
+            file.id_file, 
+            file.themes, 
+            file.other_info, 
+            COUNT(file_user.confirm) as confirm,
+            sum(CASE WHEN file_user.confirm= "0" THEN 1 ELSE 0 END) as no_ozn,
+            sum(CASE WHEN file_user.confirm = "1" THEN 1 ELSE 0 END) as ozn
+        '])
+        ->from('file_user')
+        ->leftJoin('file', 'file_user.id_file = file.id_file AND file.id_user ='. intval($id_user))
+        ->groupBy('file.id_file')
+        ->limit($pages->limit)
+        ->offset($pages->offset);
+
+        $comp = $info_sql->createCommand();
+        $themes = $comp->queryAll();
 
         return $themes;
     }
-
-    public static function getFileOrg()
-    {
-        return Yii::$app->db->createCommand('SELECT 
-            file.id_file, 
-            file.id_struktur, 
-            org_struktura.name_struktura, 
-            file.name_file,
-            file.id_type_file
-        FROM 
-            file, 
-            org_struktura 
-        WHERE 
-            file.id_struktur = org_struktura.id_struktura
-        AND 
-            file.parent is null')->queryAll();
-
-    }
+    
 }

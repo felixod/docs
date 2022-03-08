@@ -16,6 +16,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 
@@ -61,13 +62,14 @@ class SendfileController extends Controller
      * @param $id_file_user
      * @return string|\yii\web\Response
      */
-    public function actionViewud($id_file, $id_file_user)
-    {
+    public function actionViewud()
+    {   
+        
         $model = new ConfirmForm();
-
-        //если POST пришёл
+        $id_file = Yii::$app->request->get('info_f');
+        $id_file_user = Yii::$app->request->get('u_f');
+        
         if ($model->load(Yii::$app->request->post())) {
-            
             
             ConfirmForm::confirmDoc($model, $id_file_user);
             return $this->refresh();
@@ -75,19 +77,6 @@ class SendfileController extends Controller
 
         $res_fu_1 = File::findOne($id_file);
         $res_fu_2 = FileUser::findOne($id_file_user);
-        if ($model->load(Yii::$app->request->post())) {
-            
-            
-            // ConfirmForm::confirmDoc($model, base64_decode($id_file_user));
-            ConfirmForm::confirmDoc($model, $id_file_user);
-            return $this->refresh();
-        }
-
-        // $res_fu_1 = File::findOne(base64_decode($id_file));
-        // $res_fu_2 = FileUser::findOne(base64_decode($id_file_user));
-        $res_fu_1 = File::findOne($id_file);
-        $res_fu_2 = FileUser::findOne($id_file_user);
-
 
         return $this->render('viewud', ['model' => $model, 'id_file' => $res_fu_1, 'id_file_user' => $res_fu_2]);
     }
