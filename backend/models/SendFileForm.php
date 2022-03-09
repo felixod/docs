@@ -158,7 +158,8 @@ class SendFileForm extends Model
                 $validator = new EmailValidator();
                 if ($validator->validate($email, $error)) {
 
-                    $path_ozn = Url::to(['sendfile/viewud', 'id_file' => $save_id_f, 'id_file_user' => $save_id_file_user], true);
+                    $path_ozn = Url::to(['sendfile/viewud', 'info_f' =>  $save_id_f, 'u_f' =>  $save_id_file_user], true);
+
                     $htmlBody = '<p>Уважаемый пользователь, ' . $full_name[0] . '.</p>';
                     $htmlBody .= '<p> Пройдите по ссылке из этого письма для ознакомления с новым документом.</p>';
                     $htmlBody .= "<a href=$path_ozn>Ссылка для ознакомления</a>";

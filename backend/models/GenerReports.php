@@ -12,6 +12,7 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Yii;
 use yii\data\Pagination;
+use yii\db\Query;
 
 /**
  * This is the model class for table "gener_reports".
@@ -147,22 +148,26 @@ class GenerReports extends \yii\db\ActiveRecord
         $date = date('Y-m-d');
         $report_name = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
         $full_path = $structure . $report_name;
+        
+        settype($id_file, 'int');
 
-        $model = Yii::$app->db->createCommand('
-                    SELECT
-                        file.id_file as id_file,
-                        file.id_user,
-                        file.other_info,
-                        file.themes,
-                        user.full_name
-                    FROM
-                        file
-                    JOIN 
-                        user
-                    WHERE
-                        file.id_user = user.id')->queryOne();
+        $model = new Query();
+        $model->select([
+            'file.id_file as id_file',
+            'file.id_user',
+            'file.other_info',
+            'file.themes',
+            'file.date_file',
+            'user.full_name'])
+        ->from('file')
+        ->leftJoin('user', 'file.id_user = user.id')
+        ->where('file.id_file ='.intval($id_file));
+        // ->where('file.id_file = :id_file');
 
-
+        $com = $model->createCommand();
+        $resp = $com->queryOne();
+        //->bindValues(':id_file', $id_file)->
+        //var_dump($resp);
 
         $xls = PHPExcel_IOFactory::load('../web/reportPHPExcel/template_xlsx.xlsx');
 
@@ -178,10 +183,10 @@ class GenerReports extends \yii\db\ActiveRecord
         $aSheet->setCellValue('A1', '
                         ОТЧЕТ
 
-                        Отчет ознакомления с документом «' . $model['themes'] . '».
-                        Дата размещения документа в системе (https://docs.samgups.ru): ' . $date . ' г.
-                        Дата завершения ознакомления: ' . $date . ' г.
-                        Отчет сгенерировал: ' . $model['full_name']);
+                        Отчет ознакомления с документом «' . $resp['themes'] . '».
+                        Дата размещения документа в системе (https://docs.samgups.ru): ' . $resp['date_file'] . ' г.
+                        Отчет сгенерировал: ' . $resp['full_name']);
+                        // Дата завершения ознакомления: ' . $date . ' г.
 
         //Наименование столбцов
         $aSheet->setCellValue('A2', 'ФИО');
@@ -190,7 +195,7 @@ class GenerReports extends \yii\db\ActiveRecord
         $aSheet->setCellValue('D2', 'Дата ознакомления');
 
 
-        $item_fileuser = FileUser::find()->where(['id_file' => $id_file])->all();
+        $item_fileuser = FileUser::find()->where(['id_file' => intval($id_file)])->all();
         $i = 2;
         foreach ($item_fileuser as $item) {
             $aSheet->setCellValue('A' . ($i + 1), $item['full_name']);
