@@ -39,8 +39,8 @@ class FileType extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_type_file' => 'Id Type File',
-            'name_type_file' => 'Name Type File',
+            'id_type_file' => 'Номер типа файла',
+            'name_type_file' => 'Наименование типа файла',
         ];
     }
 

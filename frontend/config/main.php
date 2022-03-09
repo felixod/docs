@@ -1,4 +1,9 @@
 <?php
+use \yii\web\Request;
+
+$baseUrl = str_replace('/frontend/web', '/frontend/web', (new Request)->getBaseUrl());
+$backEndBaseUrl = str_replace('/frontend/web', '/backend/web', (new Request)->getBaseUrl());
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -40,10 +45,14 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                //['class' => 'frontend\components\ClassUrlRule'],
-                '' => 'site/index',
                 '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
             ],
+        ],
+        'urlManagerBackend' => [
+            'class' => 'yii\web\urlManager',
+            'baseUrl' => '/backend/web',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
         ],
     ],
     'params' => $params,

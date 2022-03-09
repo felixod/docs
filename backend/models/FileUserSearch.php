@@ -47,6 +47,10 @@ class FileUserSearch extends FileUser
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 30,
+
+            ]
         ]);
 
         $this->load($params);

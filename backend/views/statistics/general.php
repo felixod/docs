@@ -1,10 +1,8 @@
 <?php
 
 use yii\bootstrap4\LinkPager;
-use yii\grid\GridView;
-use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\bootstrap4\ActiveForm;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\FileUserSearch */
@@ -24,7 +22,7 @@ $this->title = 'Общая статистика';
                             href="<?= Url::to(['index', 'id_file' => $category['id_file']]) ?>"><?= $category['themes'] ?></a>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">Описание приказа: <br> <?= $category['other_info'] ?></p>
+                    <p class="card-text">Описание: <br> <?= $category['other_info'] ?></p>
                     <a class="card-link">Общее количество людей для ознакомления: <?= $category['confirm'] ?></a>
                     <a class="card-link">Ознакомленных: <?= $category['ozn'] ?></a>
                 </div>

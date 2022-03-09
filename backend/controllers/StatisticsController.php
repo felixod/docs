@@ -67,11 +67,14 @@ class StatisticsController extends Controller
     {
 
         $searchModel = new FileUserSearch();
+
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id_file);
+
         //  todo вернуться и добавить документы имеющие родственников
         $query_2 = File::find('id_file')->where(['parent' => $id_file])->all();
         $institut = [];
-        $k=0;
+        $k = 0;
         if (!empty($query_2)) {
 
             foreach ($query_2 as $key) {
@@ -93,34 +96,16 @@ class StatisticsController extends Controller
     }
 
     /**
-     * @return string
+     * @param $id_file
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     * @throws \PHPExcel_Writer_Exception
+     * @throws \yii\db\Exception
      */
-    public function actionLkreport()
+    public function actionReportexcel($id_file)
     {
-        $pathUser = '../web/reportPHPWord/' . Yii::$app->user->id . '/';
-        $dir = $pathUser;
-        $id_user = Yii::$app->user->id;
-
-        if (is_dir($dir)) {
-
-            $count_files = GenerReports::find()->where(['id_user' => $id_user])->count();
-            $pages = new Pagination(['totalCount' => $count_files, 'pageSize' => 3]);
-
-            $pages->pageSizeParam = false;
-            $info_file = GenerReports::allReports($id_user, $pages);
-
-
-            return $this->render('lkreport', ['pages' => $pages, 'test' => $info_file, 'success' => 'success']);
-        } else {
-
-            Yii::$app->session->setFlash('error', 'Нет сформированных отчетов');
-            return $this->render('lkreport', ['success' => 'error']);
-        }
-    }
-
-    public function actionReportword($id_file)
-    {
-        return $this->render('reportword', ['str_file' => GenerReports::generateReportWord($id_file)]);
+//        var_dump(\Yii::$app->runtimePath);
+        GenerReports::generateReportExcel($id_file);
     }
 
 
@@ -218,6 +203,6 @@ class StatisticsController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Запрошенная страница не существует.');
     }
 }

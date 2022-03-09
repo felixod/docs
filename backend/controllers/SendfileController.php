@@ -4,17 +4,15 @@
 namespace backend\controllers;
 
 
+use app\models\TagKeywords;
 use backend\models\File;
-use backend\models\FileStatus;
 use backend\models\FileType;
 use backend\models\FileUser;
-use backend\models\OrgStruktura;
 use backend\models\SendFileForm;
 use backend\models\ConfirmForm;
-use backend\models\SendFileOrgForm;
-use DirectoryIterator;
+use backend\models\TagkeyForm;
+use backend\models\UploadForm;
 use Yii;
-use yii\bootstrap4\Progress;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
@@ -64,20 +62,21 @@ class SendfileController extends Controller
      * @param $id_file_user
      * @return string|\yii\web\Response
      */
-    public function actionViewud($id_file, $id_file_user)
-    {
+    public function actionViewud()
+    {   
+        
         $model = new ConfirmForm();
-
-        //если POST пришёл
+        $id_file = Yii::$app->request->get('info_f');
+        $id_file_user = Yii::$app->request->get('u_f');
+        
         if ($model->load(Yii::$app->request->post())) {
-
+            
             ConfirmForm::confirmDoc($model, $id_file_user);
             return $this->refresh();
         }
 
         $res_fu_1 = File::findOne($id_file);
         $res_fu_2 = FileUser::findOne($id_file_user);
-
 
         return $this->render('viewud', ['model' => $model, 'id_file' => $res_fu_1, 'id_file_user' => $res_fu_2]);
     }
@@ -88,140 +87,80 @@ class SendfileController extends Controller
     public function actionSendu()
     {
         $model = new SendFileForm();
-        /*
-         * Если пришли post-данные, загружаем их в модель
-         */
-        if ($model->load(Yii::$app->request->post())) {
+        $data = [];
+        $session = Yii::$app->session;
 
+        if (!empty($session->get('import_list'))) {
+            $data = $session->get('import_list');
+            $session->destroy();
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
             $model->file = UploadedFile::getInstance($model, 'file');
             Yii::$app->session->setFlash(
                 'sendu-success',
                 true
             );
-            // Проверяем эти данные
             if (!$model->validate()) {
-                /*
-                 * Данные не прошли валидацию
-                 */
                 Yii::$app->session->setFlash(
                     'sendu-success',
                     false
                 );
-                // сохраняем в сессии введенные пользователем данные
-                Yii::$app->session->setFlash(
-                    'sendu-data',
-                    [
-                        'name' => $model->name,
-                        'email' => $model->email,
-                        'body_email' => $model->body_email,
-                        'file' => $model->file,
-                        'dropList' => $model->dropList,
-                        'body' => $model->body,
-
-                    ]
-                );
-                /*
-                 * Сохраняем в сессии массив сообщений об ошибках. Массив имеет вид
-                 * [
-                 *     'name' => [
-                 *         'Поле «Ваше имя» обязательно для заполнения',
-                 *     ],
-                 *     'email' => [
-                 *         'Поле «Ваш email» обязательно для заполнения',
-                 *         'Поле «Ваш email» должно быть адресом почты'
-                 *     ]
-                 * ]
-                 */
                 Yii::$app->session->setFlash(
                     'sendu-errors',
                     $model->getErrors()
                 );
-
             } else {
-                /*
-                 * Данные прошли валидацию
-                 */
-
-
                 SendFileForm::SendFile($model);
-
-
                 return $this->refresh();
             }
         }
+
+
         $access_control = FileType::find()->all();
+        $find_tag = TagKeywords::find()->all();
         // Выводим все достпуные варианты прав доступа
         $items = ArrayHelper::map($access_control, 'id_type_file', 'name_type_file');
-
-        //var_dump($items);
+        $find_tag_items = ArrayHelper::map($find_tag, 'id_tag', 'tagname');
+        $full_select = ArrayHelper::map($data, 'full_list', 'full_list');
         $params = [
             'prompt' => 'Выберите вид документа'
         ];
-        return $this->render('sendu', ['model' => $model, 'params' => $params, 'items' => $items]);
 
+
+        return $this->render('sendu', ['model' => $model, 'tag_name' => $find_tag_items, 'items' => $items, 'email_list' => $full_select, 'data' => $data]);
+
+    }
+
+
+    /**
+     * @return string
+     */
+    public function actionTagkey()
+    {
+        $model = new TagkeyForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            TagKeywords::addTagname($model);
+        }
+
+        return $this->renderAjax('tagkey', ['model' => $model]);
     }
 
     /**
      * @return string
      */
-    public function actionSenduorg()
+    public function actionImportlist()
     {
-        $model = new SendFileOrgForm();
-        /*
-        * Если пришли post-данные, загружаем их в модель
-        */
+        $model = new UploadForm();
+
         if ($model->load(Yii::$app->request->post())) {
-            // Проверяем эти данные
-            if (!$model->validate()) {
-                /*
-                 * Данные не прошли валидацию
-                 */
-                Yii::$app->session->setFlash(
-                    'sendu-success',
-                    false
-                );
-                // сохраняем в сессии введенные пользователем данные
-                Yii::$app->session->setFlash(
-                    'sendu-data',
-                    [
-                        'email' => $model->email,
-                        'body' => $model->body
-                    ]
-                );
-                /*
-                 * Сохраняем в сессии массив сообщений об ошибках. Массив имеет вид
-                 * [
-                 *     'name' => [
-                 *         'Поле «Ваше имя» обязательно для заполнения',
-                 *     ],
-                 *     'email' => [
-                 *         'Поле «Ваш email» обязательно для заполнения',
-                 *         'Поле «Ваш email» должно быть адресом почты'
-                 *     ]
-                 * ]
-                 */
-                Yii::$app->session->setFlash(
-                    'sendu-errors',
-                    $model->getErrors()
-                );
-            } else {
-                /*
-                 * Данные прошли валидацию
-                 */
-                SendFileOrgForm::SendFileOrg($model);
-                return $this->refresh();
-            }
+            $model->file_user = UploadedFile::getInstance($model, 'file_user');
+            UploadForm::impotrSave($model);
+            return $this->redirect('sendu');
         }
-        $access_control = File::getFileOrg();
-        // Выводим все достпуные варианты прав доступа
-        $items = ArrayHelper::map($access_control, 'id_file', 'name_file', 'name_struktura');
 
-        //var_dump($items);
-        $params = [
-            'prompt' => 'Выберите документ'
-        ];
-        return $this->render('senduorg', ['model' => $model, 'params' => $params, 'items' => $items]);
-
-
+        return $this->renderAjax('importlist', ['model' => $model]);
     }
+
 }

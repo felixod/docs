@@ -5,11 +5,14 @@ namespace app\models;
 use backend\models\File;
 use backend\models\FileUser;
 use common\models\User;
+use PHPExcel_IOFactory;
+use PHPExcel_Writer_Excel2007;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Yii;
 use yii\data\Pagination;
+use yii\db\Query;
 
 /**
  * This is the model class for table "gener_reports".
@@ -93,16 +96,12 @@ class GenerReports extends \yii\db\ActiveRecord
     {
         $list = GenerReports::myscandir($dir);
 
-        foreach ($list as $file)
-        {
-            if (is_dir($dir.$file))
-            {
-                GenerReports::clear_dir($dir.$file.'/');
-                rmdir($dir.$file);
-            }
-            else
-            {
-                unlink($dir.$file);
+        foreach ($list as $file) {
+            if (is_dir($dir . $file)) {
+                GenerReports::clear_dir($dir . $file . '/');
+                rmdir($dir . $file);
+            } else {
+                unlink($dir . $file);
             }
         }
     }
@@ -114,7 +113,7 @@ class GenerReports extends \yii\db\ActiveRecord
     public static function myscandir($dir)
     {
         $list = scandir($dir);
-        unset($list[0],$list[1]);
+        unset($list[0], $list[1]);
         return array_values($list);
     }
 
@@ -125,7 +124,7 @@ class GenerReports extends \yii\db\ActiveRecord
      */
     public static function generateHash($length)
     {
-        $chars = 'abdefhiknrstyzABDEFGHKNQRSTYZ23456789';
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
         $numChars = strlen($chars);
         $string = '';
         for ($i = 0; $i < $length; $i++) {
@@ -134,191 +133,89 @@ class GenerReports extends \yii\db\ActiveRecord
         return $string;
     }
 
-    public static function allReports($id_user, $pagination)
+
+    /**
+     * @param $id_file
+     * @return array|\yii\db\ActiveRecord|null
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     * @throws \PHPExcel_Writer_Exception
+     * @throws \yii\db\Exception
+     */
+    public static function generateReportExcel($id_file)
     {
-        $model = Yii::$app->db->createCommand('
-                    SELECT
-                        gener_reports.id_report,
-                        file.id_file as id_file,
-                        file.id_user,
-                        file.other_info,
-                        file.themes,
-                        gener_reports.date_gener,
-                        gener_reports.name_report,
-                        user.full_name
-                    FROM
-                        gener_reports
-                    JOIN
-                        file
-                    ON
-                        file.id_file = gener_reports.id_file
-                    JOIN
-                        user
-                    ON 
-                        gener_reports.id_user = user.id
-                    WHERE
-                        gener_reports.id_user =' . $id_user.'
-
-                    LIMIT '.$pagination->limit
-                    .'
-                    OFFSET '.$pagination->offset)->queryAll();
-
-        Yii::$app->session->setFlash('success_report', "Отчет сформирован");
-        return $model;
-    }
-
-    public static function generateReportWord($id_file)
-    {
-        $id_user = Yii::$app->user->id;
-        $structure = '../web/reportPHPWord/' . $id_user . '/' . $id_file . '/';
-        $date = date('Y-m-d H:i:s');
-        $unixDate = strtotime($date);
-
-
-        $report_name = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.docx';
+        $structure = sys_get_temp_dir().'/';
+        $date = date('Y-m-d');
+        $report_name = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.xlsx';
         $full_path = $structure . $report_name;
-        $full_name_report = 'report_' . date('Y-m-d') . '_' . Yii::$app->user->identity->full_name . '.docx';
-        $structure_path = '../reportPHPWord/' . $id_user . '/' . $id_file . '/'.$report_name;
+        
+        settype($id_file, 'int');
 
-        if (!is_dir($structure)) {
-            mkdir($structure, 0777, true);
+        $model = new Query();
+        $model->select([
+            'file.id_file as id_file',
+            'file.id_user',
+            'file.other_info',
+            'file.themes',
+            'file.date_file',
+            'user.full_name'])
+        ->from('file')
+        ->leftJoin('user', 'file.id_user = user.id')
+        ->where('file.id_file ='.intval($id_file));
+        // ->where('file.id_file = :id_file');
+
+        $com = $model->createCommand();
+        $resp = $com->queryOne();
+        //->bindValues(':id_file', $id_file)->
+        //var_dump($resp);
+
+        $xls = PHPExcel_IOFactory::load('../web/reportPHPExcel/template_xlsx.xlsx');
+
+        $aSheet = $xls->getActiveSheet();
+
+        //Ширина столбцов
+        $aSheet->getColumnDimension('A')->setWidth(50);
+        $aSheet->getColumnDimension('B')->setWidth(13);
+        $aSheet->getColumnDimension('C')->setWidth(40);
+        $aSheet->getColumnDimension('D')->setWidth(20);
+
+
+        $aSheet->setCellValue('A1', '
+                        ОТЧЕТ
+
+                        Отчет ознакомления с документом «' . $resp['themes'] . '».
+                        Дата размещения документа в системе (https://docs.samgups.ru): ' . $resp['date_file'] . ' г.
+                        Отчет сгенерировал: ' . $resp['full_name']);
+                        // Дата завершения ознакомления: ' . $date . ' г.
+
+        //Наименование столбцов
+        $aSheet->setCellValue('A2', 'ФИО');
+        $aSheet->setCellValue('B2', 'Ознакомился');
+        $aSheet->setCellValue('C2', 'Цифровой идентификатор ознакомления');
+        $aSheet->setCellValue('D2', 'Дата ознакомления');
+
+
+        $item_fileuser = FileUser::find()->where(['id_file' => intval($id_file)])->all();
+        $i = 2;
+        foreach ($item_fileuser as $item) {
+            $aSheet->setCellValue('A' . ($i + 1), $item['full_name']);
+            if ($item['confirm'] == '1') {
+                $aSheet->setCellValue('B' . ($i + 1), 'Да');
+            } else {
+                $aSheet->setCellValue('B' . ($i + 1), 'Нет');
+            }
+            $aSheet->setCellValue('C' . ($i + 1), $item['signature']);
+            if (!empty($item['signature'])) {
+                $aSheet->setCellValue('D' . ($i + 1), $item['date_confirm']);
+            }
+            $i++;
         }
 
-        $PHPWord = new PhpWord();
-        $styleTable = array('borderSize' => 6, 'borderColor' => '006699', 'cellMargin' => 80);
-        $templateProcessor = $PHPWord->loadTemplate('../web/reportPHPWord/shablon_otch_word.docx');
+        $objWriter = new PHPExcel_Writer_Excel2007($xls);
+        $objWriter->save($full_path);
+        Yii::$app->response->sendFile($full_path);
+        unlink($full_path);
 
-        GenerReports::clear_dir($structure);
-
-        $templateProcessor->setValue('year', date('Y'));
-        $templateProcessor->setValue('mes', date('m'));
-        $templateProcessor->setValue('day', date('d'));
-        $templateProcessor->setValue('num_doc', $id_file);
-        $templateProcessor->setValue('fio_name', Yii::$app->user->identity->full_name);
-        $templateProcessor->setValue('time', date('H:i:s'));
-        $templateProcessor->setValue('fio_username', 'Иванов Иван Иванович');
-        $templateProcessor->setValue('ecp', GenerReports::generateHash(16));
-
-
-        $section = $PHPWord ->addSection();
-        $header = array('size' => 16, 'bold' => true );
-        $styleCell =
-            [
-                'borderColor' =>'#000000',
-                'borderSize' => 6,
-            ];
-
-        $rows = 3;
-        $cols = 5;
-        $section->addText('Basic table');
-
-        $table = $section->addTable();
-        $table->addRow(900);
-        // Add cells
-        $table->addCell(2000, $styleCell)->addText('ФИО');
-        $table->addCell(2000, $styleCell)->addText('Почта');
-        $table->addCell(2000, $styleCell)->addText('Ознакомился');
-//        $table->addCell(2000, $styleCell)->addText('Подпись');
-        $table->addCell(2000, $styleCell)->addText('Дата');
-
-        $gttest = FileUser::find()->where(['id_file' => $id_file])->all();
-        //$gttest = Yii::$app->db->createCommand('SELECT * FROM file_user WHERE id_file='.$id_file)->queryAll();
-
-        $count = 4;
-
-            for ($r = 1; $r <= 1; $r++) {
-                foreach($gttest as $item){
-                $table->addRow();
-                    $table->addCell(2000, $styleCell)->addText("{$item['full_name']}");
-                    $table->addCell(2000, $styleCell)->addText("{$item['email']}");
-                    if($item['confirm'] == 0){
-                        $table->addCell(200, $styleCell)->addText("Нет");
-                    }elseif ($item['confirm'] == 1){
-                        $table->addCell(200, $styleCell)->addText("Да");
-                    }
-//                    $table->addCell(2000)->addText("{$item['signature']}");
-                    $table->addCell(2500, $styleCell)->addText("{$item['date_confirm']}");
-                }
-        }
-
-        $objWriter = IOFactory::createWriter($PHPWord, 'Word2007');
-        $fullxml = $objWriter->getWriterPart('Document')->write();
-        $tablexml = preg_replace('/^[\s\S]*(<w:tbl\b.*<\/w:tbl>).*/', '$1', $fullxml);
-        $templateProcessor->setValue('myTable', $tablexml);
-        $templateProcessor->saveAs($full_path);
-
-
-
-        $find = GenerReports::find()->where(['id_file' => $id_file])->one();
-
-        if($find == null) {
-
-            $report = new GenerReports();
-            $report->id_user = $id_user;
-            $report->id_file = $id_file;
-            $report->name_report = $full_name_report;
-            $report->date_gener = $date;
-            $report->caption = GenerReports::generateHash(16);
-            $report->save();
-
-            $model = Yii::$app->db->createCommand('
-                    SELECT
-                        gener_reports.id_report,
-                        file.id_file as id_file,
-                        file.id_user,
-                        file.other_info,
-                        file.themes,
-                        gener_reports.date_gener,
-                        gener_reports.name_report
-                    FROM
-                        gener_reports
-                    JOIN
-                        file
-                    ON
-                        file.id_file = gener_reports.id_file
-                    WHERE
-                        gener_reports.id_report =' . Yii::$app->db->getLastInsertID())->queryOne();
-
-            Yii::$app->session->setFlash('success_report', "Отчет сформирован");
-            return [$model, $structure_path];
-
-        } elseif ($find != null) {
-
-            $report_upd = $find;
-            $report_upd->date_gener = $date;
-            $report_upd->name_report = $full_name_report;
-            $report_upd->caption = GenerReports::generateHash(16);
-            $report_upd->save();
-
-            $model = Yii::$app->db->createCommand('
-                    SELECT
-                        gener_reports.id_report,
-                        file.id_file as id_file,
-                        file.id_user,
-                        file.other_info,
-                        file.themes,
-                        user.full_name,
-                        gener_reports.date_gener,
-                        gener_reports.name_report
-                    FROM
-                        gener_reports
-                    JOIN
-                        file
-                    ON
-                        file.id_file = gener_reports.id_file
-                    JOIN 
-                        user
-                    ON
-                        gener_reports.id_user = user.id
-                    WHERE
-                        gener_reports.id_file =' . $id_file)->queryOne();
-
-            Yii::$app->session->setFlash('success_report', "Отчет сформирован");
-
-            return [$model, $structure_path];
-
-        }
-        return $find;
     }
 
 }

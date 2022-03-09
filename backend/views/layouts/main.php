@@ -5,10 +5,8 @@
 /* @var $content string */
 
 use backend\assets\AppAsset;
-use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap4\Nav;
-use yii\bootstrap4\NavBar;
 use yii\bootstrap4\Breadcrumbs;
 use common\widgets\Alert;
 
@@ -30,8 +28,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/back
     <?php $this->beginBody() ?>
 
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<?= Yii::$app->homeUrl ?>"><img
-                        src="/backend/web/img/logow.png"/></a></h5>
+        <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<?= Yii::$app->homeUrl ?>"><img src="/backend/web/img/logow.png"/></a></h5>
         <?php
         if (Yii::$app->user->isGuest) {
             try {
@@ -57,21 +54,17 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/back
                     'encodeLabels' => false,
                     'items' => [
 
-                        ['label' => 'Основное', 'url' => ['/site/index'], 'items' => [
-//                        ['label' => 'Главная', 'url' => ['/site/index']],
-                            ['label' => 'Регистрация', 'url' => ['/site/signup']],
+                        ['label' => 'Основное', 'items' => [
                             ['label' => 'Новый документ', 'url' => ['/sendfile/sendu']],
-                            ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
+//                            ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
                         ]],
-                        ['label' => 'Справочники', 'url' => ['/site/index'], 'items' => [
+                        ['label' => 'Справочники', 'items' => [
+                            ['label' => 'Регистрация пользователя', 'url' => ['/site/signup']],
                             ['label' => 'Организационная структура', 'url' => ['orgstruktura/index']],
                             ['label' => 'Вид документа', 'url' => ['/filetype/index']],
                         ]],
-                        ['label' => 'Стастистика', 'url' => ['/statistics/lkreport'], 'items' => [
-
-                            ['label' => 'Сформированные отчеты', 'url' => ['statistics/lkreport']],
-                            ['label' => 'Общая стастистика', 'url' => ['/statistics/general']],],],
-
+                        ['label' => 'Стастистика', 'items' => [
+                            ['label' => 'Общая статистика', 'url' => ['/statistics/general']],],],
                         Yii::$app->user->isGuest ? (
 
                         ['label' => 'Авторизация', 'url' => ['/site/login']]) :
@@ -91,13 +84,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '/back
                     'encodeLabels' => false,
                     'items' => [
 
-                        ['label' => 'Основное', 'url' => [''], 'items' => [
+                        ['label' => 'Основное', 'items' => [
                             ['label' => 'Новый документ', 'url' => ['/sendfile/sendu']],
-                            ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
+//                            ['label' => 'Рассылка готового документа', 'url' => ['/sendfile/senduorg']],
                         ]],
-                        ['label' => 'Стастистика', 'url' => ['/statistics/lkreport'], 'items' => [
-                            ['label' => 'Сформированные отчеты', 'url' => ['statistics/lkreport']],
-                            ['label' => 'Общая стастистика', 'url' => ['/statistics/general']],],],
+                        ['label' => 'Стастистика', 'items' => [
+                            ['label' => 'Общая статистика', 'url' => ['/statistics/general']],],],
 
                         Yii::$app->user->isGuest ? (
 
